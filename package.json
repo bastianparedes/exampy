@@ -1,0 +1,9 @@
+{
+  "name": "exampy",
+  "devDependencies": {
+    "husky": "^8.0.0"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}

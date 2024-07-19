@@ -1,0 +1,34 @@
+{
+  "/api/python/**": {
+    "target": "http://python:5000",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/python": ""
+    }
+  },
+  "/api/auth/**": {
+    "target": "http://python:5000",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/auth": ""
+    }
+  },
+  "/api/ai/**": {
+    "target": "http://ai:3000",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/ai": ""
+    }
+  },
+  "/api/pyodide/**": {
+    "target": "http://pyodide:3100",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api/pyodide": ""
+    }
+  }
+}

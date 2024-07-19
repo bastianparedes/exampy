@@ -1,0 +1,7 @@
+# Makes push --force to clone repository
+if [ -z "$SECOND_PUSH_DONE" ]; then
+  export SECOND_PUSH_DONE=true
+  git remote add second-repo "https://github.com/bastianparedes/exampy-clone.git"
+  git push second-repo main -f
+  git remote remove second-repo
+fi

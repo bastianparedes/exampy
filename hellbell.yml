@@ -1,0 +1,30 @@
+workspaces:
+
+  main:
+    path: ./
+    tasks:
+      - install: "npm install"
+
+  ai:
+    path: ./apps/ai
+    tasks:
+      - install: "npm install"
+      - lint: "npm run lint"
+      - lint:fix: "npm run lint:fix"
+      - test: "npm run test"
+
+  python:
+    path: ./apps/python
+    tasks:
+      - install: "pip install -r requirements.txt"
+      - lint: "flake8 --append-config pyproject.toml"
+      - lint:fix: "autopep8 ."
+      - test: "pytest"
+
+  frontend:
+    path: ./apps/frontend
+    tasks:
+      - install: "npm install"
+      - lint: "npm run lint"
+      - lint:fix: "npm run lint:fix"
+      - test: "npm run test"

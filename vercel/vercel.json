@@ -1,0 +1,12 @@
+{
+  "redirects": [
+  ],
+  "rewrites": [
+    { "source": "/api/python/:path*", "destination": "https://exampy-python.vercel.app/:path*" },
+    { "source": "/api/auth/:path*", "destination": "https://exampy-python.vercel.app/:path*" },
+    { "source": "/api/pyodide/:path*", "destination": "https://exampy-pyodide.vercel.app/:path*" },
+    { "source": "/api/ai/:path*", "destination": "https://exampy-ai.vercel.app/:path*" },
+    { "source": "/", "destination": "https://exampy-frontend.vercel.app/" },
+    { "source": "/:match*", "destination": "https://exampy-frontend.vercel.app/:match*" }
+  ]
+}

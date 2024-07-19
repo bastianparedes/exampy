@@ -1,0 +1,65 @@
+@if (this.isLoading) {
+  <!-- <div class="h-svh w-svw top-0 left-0 bg-white/95 flex justify-center items-start fixed z-50">
+    <div class="mt-52">
+      <app-progress [percentage]="this.creatingPdf.percentage" [texts]="this.creatingPdf.texts"></app-progress>
+    </div>
+  </div> -->
+  <app-loader />
+}
+
+
+<form class="w-full p-5" [formGroup]="exercise">
+  <div>
+    <mat-form-field class="w-full">
+      <mat-label>Name</mat-label>
+      <input matInput maxlength="100" placeholder="New Exercise" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field class="w-full">
+      <mat-label>Description</mat-label>
+      <textarea
+        matInput
+        maxlength="100"
+        placeholder="Description new exercise"
+        formControlName="description"></textarea>
+    </mat-form-field>
+
+    <div class="h-96 border-2 border-solid">
+      @if (this.isClientSide) {
+        <ngx-monaco-editor
+        style="width: 100%; height: 100%"
+        [options]="{
+          theme: 'vs-light',
+          language: 'python',
+          wordWrap: 'off',
+          tabSize: 2,
+          minimap: { enabled: false },
+          readOnly: !this.canBeEdited
+        }"
+        formControlName="code" />
+      }
+      
+    </div>
+    <div class="flex gap-5 mt-5">
+      <button mat-flat-button class="ai-button" (click)="this.openDialog()" [disabled]="!this.canBeEdited">Ask AI</button>
+      @if (this.canBeSaved) {
+        <button mat-flat-button class="" (click)="this.save()" [disabled]="!this.canBeEdited">Save</button>
+      }
+      @else {
+        <button mat-flat-button class="" (click)="this.test()" [disabled]="!this.canBeEdited">Test</button>
+      }
+      
+      <a mat-flat-button class="" href="/exercises"
+        >Cancel</a
+      >
+    </div>
+  </div>
+</form>
+
+@if (this.pdfUrl !== undefined) {
+  <div class="relative w-full px-5">
+    <div class="relative w-auto h-[1150px] py-10">
+      <embed class="w-full h-full" [src]="pdfUrl" type="application/pdf" />
+    </div>
+  </div>
+}

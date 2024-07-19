@@ -1,0 +1,14 @@
+{
+  "name": "python",
+  "version": "1.0.0",
+  "engines": {
+    "node": "^20.x"
+  },
+  "scripts": {
+    "dev": "python api/dev.py",
+    "lint": "flake8 --append-config pyproject.toml",
+    "lint:fix": "autopep8 .",
+    "test": "pytest",
+    "python-install": "pip install -r requirements.txt"
+  }
+}
