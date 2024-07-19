@@ -32,6 +32,8 @@ export class AiService {
       'Debes entregarme solo la función fn, nada mas.',
       'No desordenes "alternatives_texts" ni "alternatives_identifiers", ya que lo haré yo después.',
       'Debe poder generar por lo menos 5 resultados con "question_identifiers" diferentes.',
+      '"alternatives_identifiers" debe ser una lista de listas con primitivos',
+      '"question_identifiers" debe ser una lista de primitivos',
       input,
     ].join('\n');
 
