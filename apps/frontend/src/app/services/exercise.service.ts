@@ -19,11 +19,8 @@ export class ExerciseService {
   pyodide = inject(PyodideService);
   latex = inject(LatexService);
 
-  getRandomSeed(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
   async validateResult(resultFromCode: unknown): Promise<{ isValid: true; instance: Exercise; } | { isValid: false; message: string; }> {
+    // eslint-disable-next-line no-constant-condition
     if (true) {
       const ajv = new Ajv({ allErrors: true });
       const validate = ajv.compile({
@@ -45,6 +42,7 @@ export class ExerciseService {
       };
     }
 
+    // eslint-disable-next-line no-constant-condition
     if (true) {
       const ajv = new Ajv({ allErrors: true });
       const validate = ajv.compile({
@@ -75,6 +73,7 @@ export class ExerciseService {
       };
     }
 
+    // eslint-disable-next-line no-constant-condition
     if (true) {
       const ajv = new Ajv({ allErrors: true });
       const validate = ajv.compile({
@@ -102,6 +101,7 @@ export class ExerciseService {
       };
     }
 
+    // eslint-disable-next-line no-constant-condition
     if (true) {
       const ajv = new Ajv({ allErrors: true });
       const validate = ajv.compile({
@@ -126,7 +126,6 @@ export class ExerciseService {
     }
   };
 
-
   async createExercise(
     fnCode: string,
     maxTriesToCreateValidExercise: number,
@@ -135,8 +134,7 @@ export class ExerciseService {
     let message = '';
     for (let numberTry = 1 ; numberTry <= maxTriesToCreateValidExercise ; numberTry++) {
       try {
-        const randomSeed = this.getRandomSeed(-100, 100);
-        const resultFn = await this.pyodide.runPythonCode([await this.pyodide.getHeaderCode(), fnCode, `fn(${numberTry}, ${randomSeed})`].join('\n'), _window);
+        const resultFn = await this.pyodide.runPythonCode([await this.pyodide.getHeaderCode(), fnCode, 'generator = fn()', 'next(generator)'].join('\n'), _window);
         const resultTringCreateExercise = await this.validateResult(resultFn);
         if (resultTringCreateExercise.isValid) {
           return resultTringCreateExercise;
