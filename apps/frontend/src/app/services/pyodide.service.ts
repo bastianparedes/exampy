@@ -118,13 +118,16 @@ export class PyodideService {
     const pyodide = await loadPyodide();
     this.pyodide = pyodide;
     await this.pyodide.loadPackage('sympy');
-    await this.pyodide.runPython('print("Pyodide is ready")');
+    await this.pyodide.runPython('print("Loaded pyodide")');
     return this.pyodide;
   }
 
   async runPythonCode(code: string, _window=window): Promise<unknown> {
     const pyodide = await this.getPyodide();
-    const result = await pyodide.runPython(code).toJs({dict_converter : Object.fromEntries});
+    const result = await pyodide.runPython(code)
+    if (typeof result === 'object' && result !== null) {
+      return result.toJs({dict_converter : Object.fromEntries});
+    }
     return result;
   };
 }

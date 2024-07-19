@@ -28,5 +28,3 @@ def fn(): # Factorización de polinomio de grado 2
       ],
       'question_identifiers': [a, b, c]
     }
-
-  print(fn())

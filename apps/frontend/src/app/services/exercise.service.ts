@@ -134,7 +134,7 @@ export class ExerciseService {
     let message = '';
     for (let numberTry = 1 ; numberTry <= maxTriesToCreateValidExercise ; numberTry++) {
       try {
-        const resultFn = await this.pyodide.runPythonCode([await this.pyodide.getHeaderCode(), fnCode, 'generator = fn()', 'next(generator)'].join('\n'), _window);
+        const resultFn = await this.pyodide.runPythonCode('next(GENERATOR)', _window);
         const resultTringCreateExercise = await this.validateResult(resultFn);
         if (resultTringCreateExercise.isValid) {
           return resultTringCreateExercise;
@@ -162,6 +162,7 @@ export class ExerciseService {
     _window=window
   ) {
     const exercises: Exercise[] = [];
+    await this.pyodide.runPythonCode([await this.pyodide.getHeaderCode(), fnCode, 'GENERATOR = fn()'].join('\n'), _window);
     for (let numberExercise = 1 ; numberExercise <= quantity ; numberExercise++) {
       for (let numberTryExerciseDifferent = 1 ; numberTryExerciseDifferent <= maxTriesToCreateExerciseDifferent ; numberTryExerciseDifferent++) {
         const newExerciseData = await this.createExercise(
