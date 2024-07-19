@@ -126,13 +126,6 @@ export class ExerciseService {
     }
   };
 
-  async tryCreateExercise(fnCode: string, controledSeed: number, _window=window) {
-    console.log(controledSeed);
-    const randomSeed = this.getRandomSeed(-100, 100);
-    const resultFn = await this.pyodide.runPythonCode([await this.pyodide.getHeaderCode(), fnCode, `fn(${controledSeed}, ${randomSeed})`].join('\n'), _window);
-    const resultValidated = this.validateResult(resultFn);
-    return resultValidated;
-  }
 
   async createExercise(
     fnCode: string,
@@ -142,7 +135,9 @@ export class ExerciseService {
     let message = '';
     for (let numberTry = 1 ; numberTry <= maxTriesToCreateValidExercise ; numberTry++) {
       try {
-        const resultTringCreateExercise = await this.tryCreateExercise(fnCode, numberTry, _window);
+        const randomSeed = this.getRandomSeed(-100, 100);
+        const resultFn = await this.pyodide.runPythonCode([await this.pyodide.getHeaderCode(), fnCode, `fn(${numberTry}, ${randomSeed})`].join('\n'), _window);
+        const resultTringCreateExercise = await this.validateResult(resultFn);
         if (resultTringCreateExercise.isValid) {
           return resultTringCreateExercise;
         }
