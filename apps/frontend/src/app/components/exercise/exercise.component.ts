@@ -61,7 +61,7 @@ export class ExerciseComponent implements OnInit {
     description: new FormControl('', [
       Validators.required,
       Validators.minLength(1),
-      Validators.maxLength(100),
+      Validators.maxLength(200),
     ]),
     code: new FormControl('', [
       Validators.required,
