@@ -14,7 +14,7 @@ export class AiService {
 
   async getPrompt(input: string) {
     const headerCode = await this.pythonService.getHeaderCode();
-    const examples = await this.pythonService.getExamples(5);
+    const examples = await this.pythonService.getExamples(10);
 
     const completePrompt = [
       'Tengo una aplicación escrita en Python que utiliza las siguientes clases y módulos.',
@@ -29,7 +29,7 @@ export class AiService {
       '',
       '',
       'Quiero que me des otro código python que construya el siguiente tipo de ejercicio:',
-      'Debes entregarme solo la función fn con su decorador, nada mas.',
+      'Debes entregarme solo la función fn, nada mas.',
       'No desordenes "alternatives_texts" ni "alternatives_identifiers", ya que lo haré yo después.',
       'Debe poder generar por lo menos 5 resultados con "question_identifiers" diferentes.',
       input,
