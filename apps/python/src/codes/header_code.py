@@ -38,3 +38,102 @@ class Latex:
   def line_break(): return r' \hfill \break '
   def power(base, exponent): return fr'{{{base}}}^{{{exponent}}}'
 
+class Sympy_class:
+  def __init__(self, sympy_element_not_evaluated=None):
+    self.ZERO = sympy.Integer(0)
+    self.ONE = sympy.Integer(1)
+    self.no_evaluated = sympy_element_not_evaluated
+    self.evaluated = None if sympy_element_not_evaluated is None else sympy_element_not_evaluated.simplify()
+
+  def __add__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Add(self.no_evaluated, other_element, evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+  
+  def __radd__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Add(other_element, self.no_evaluated, evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+  
+  def __sub__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Add(self.no_evaluated, -self.ONE*other_element,  evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+  
+  def __rsub__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Add(self.ONE*other_element, -self.ONE*self.no_evaluated,  evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+  
+  def __mul__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Mul(self.no_evaluated, other_element, evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+  
+  def __rmul__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Mul(other_element, self.no_evaluated, evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+
+  def __truediv__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Mul(self.no_evaluated, self.ONE/other_element, evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+  
+  def __pow__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Pow(self.no_evaluated, other_element, evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+  
+  def __rpow__(self, other):
+    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
+    result = Sympy_class()
+    result.no_evaluated = sympy.Pow(other_element, self.no_evaluated, evaluate=False)
+    result.evaluated = result.no_evaluated.simplify()
+    return result
+  
+  def simplify(self):
+    return self.evaluated
+  
+  def __str__(self):
+    return str(self.no_evaluated)
+
+def get_class(sympy_class):
+  class Decorated_class(Sympy_class):
+    def __init__(self, *args, **kwargs):
+      self.evaluated = sympy_class(*args, **kwargs)
+      self.no_evaluated = self.evaluated.simplify()
+  return Decorated_class
+
+
+Rational = get_class(sympy.Rational)
+Integer = get_class(sympy.Integer)
+Symbol = get_class(sympy.Symbol)
+
+def Add(*args):
+  new_args = []
+  for arg in args:
+    new_args.append(arg.no_evaluated if isinstance(arg, Sympy_class) else arg)
+  return Sympy_class(sympy.Add(*new_args, evaluate=False))
+
+def Mul(*args):
+  new_args = []
+  for arg in args:
+    new_args.append(arg.no_evaluated if isinstance(arg, Sympy_class) else arg)
+  return Sympy_class(sympy.Mul(*new_args, evaluate=False))
