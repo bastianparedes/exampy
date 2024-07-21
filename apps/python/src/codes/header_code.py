@@ -1,14 +1,17 @@
-import math
-import typing
+import copy
 import random
-import fractions
+import math
 import sympy
+from sympy import *
+
+sympy.core.parameters.global_parameters.evaluate = False
+
 
 class Latex:
-  def math_mode(expresion: str): return f'$ {sympy.latex(expresion).replace(r'\frac', r'\dfrac')} $'
-  def root(subradical: str, index: str): return fr'\sqrt[{index}]{subradical}'
-  def fraction(numerator: typing.Union[str, int, float], denominator: typing.Union[str, int, float]): return fr' \dfrac{{{numerator}}}{{{denominator}}} '
-  def overline(element: typing.Union[str, int, float]): return fr' \overline{{{element}}} '
+  def math_mode(expresion): return f'$ {sympy.latex(expresion).replace(r'\frac', r'\dfrac')} $'
+  def root(subradical, index): return fr'\sqrt[{index}]{subradical}'
+  def fraction(numerator, denominator): return fr' \dfrac{{{numerator}}}{{{denominator}}} '
+  def overline(element): return fr' \overline{{{element}}} '
   def parenthesis(expression): return fr' \left( {expression} \right) '
   def brackets(expression): return fr' \left[ {expression} \right] '
   def degree(): return r' \degree '
@@ -38,102 +41,26 @@ class Latex:
   def line_break(): return r' \hfill \break '
   def power(base, exponent): return fr'{{{base}}}^{{{exponent}}}'
 
-class Sympy_class:
-  def __init__(self, sympy_element_not_evaluated=None):
-    self.ZERO = sympy.Integer(0)
-    self.ONE = sympy.Integer(1)
-    self.no_evaluated = sympy_element_not_evaluated
-    self.evaluated = None if sympy_element_not_evaluated is None else sympy_element_not_evaluated.simplify()
+def decorator_fix(fn):
+  def wrapper(*args, **kwargs):
+    sympy.core.parameters.global_parameters.evaluate = True
+    result = fn(*args, **kwargs)
+    sympy.core.parameters.global_parameters.evaluate = False
+    return result
+  return wrapper
 
-  def __add__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Add(self.no_evaluated, other_element, evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
-  
-  def __radd__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Add(other_element, self.no_evaluated, evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
-  
-  def __sub__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Add(self.no_evaluated, -self.ONE*other_element,  evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
-  
-  def __rsub__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Add(self.ONE*other_element, -self.ONE*self.no_evaluated,  evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
-  
-  def __mul__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Mul(self.no_evaluated, other_element, evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
-  
-  def __rmul__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Mul(other_element, self.no_evaluated, evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
+@decorator_fix
+def simplify(*args, **kwargs):
+  return sympy.simplify(*args, **kwargs)
 
-  def __truediv__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Mul(self.no_evaluated, self.ONE/other_element, evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
-  
-  def __pow__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Pow(self.no_evaluated, other_element, evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
-  
-  def __rpow__(self, other):
-    other_element = other.no_evaluated if isinstance(other, Sympy_class) else other
-    result = Sympy_class()
-    result.no_evaluated = sympy.Pow(other_element, self.no_evaluated, evaluate=False)
-    result.evaluated = result.no_evaluated.simplify()
-    return result
-  
-  def simplify(self):
-    return self.evaluated
-  
-  def __str__(self):
-    return str(self.no_evaluated)
+@decorator_fix
+def expand(*args, **kwargs):
+  return sympy.expand(*args, **kwargs)
 
-def get_class(sympy_class):
-  class Decorated_class(Sympy_class):
-    def __init__(self, *args, **kwargs):
-      self.evaluated = sympy_class(*args, **kwargs)
-      self.no_evaluated = self.evaluated.simplify()
-  return Decorated_class
+@decorator_fix
+def factor(*args, **kwargs):
+  return sympy.factor(*args, **kwargs)
 
-
-Rational = get_class(sympy.Rational)
-Integer = get_class(sympy.Integer)
-Symbol = get_class(sympy.Symbol)
-
-def Add(*args):
-  new_args = []
-  for arg in args:
-    new_args.append(arg.no_evaluated if isinstance(arg, Sympy_class) else arg)
-  return Sympy_class(sympy.Add(*new_args, evaluate=False))
-
-def Mul(*args):
-  new_args = []
-  for arg in args:
-    new_args.append(arg.no_evaluated if isinstance(arg, Sympy_class) else arg)
-  return Sympy_class(sympy.Mul(*new_args, evaluate=False))
+@decorator_fix
+def solve(*args, **kwargs):
+  return sympy.solve(*args, **kwargs)

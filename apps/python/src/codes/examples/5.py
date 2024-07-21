@@ -7,25 +7,25 @@ def fn(): # Descomposición y suma de raícez cuadradas
     random.shuffle(multipliers)
     [b1, b2, b3] = multipliers[:3]
 
-    r1 = sympy.sqrt(b1**2 * base, evaluate=False)
-    r2 = sympy.sqrt(b2**2 * base, evaluate=False)
-    r3 = sympy.sqrt(b3**2 * base, evaluate=False)
+    r1 = sqrt(b1**2 * base)
+    r2 = sqrt(b2**2 * base)
+    r3 = sqrt(b3**2 * base)
     
-    expression = sympy.Add(r1, r2, r3, evaluate=False)
+    expression = Add(r1, r2, r3)
 
     yield {
       'question': f'¿Cuál es el resultado de {Latex.math_mode(expression)}?',
       'alternatives_texts': [
-        Latex.math_mode((r1 + r2 + r3).simplify()),
-        Latex.math_mode((r1 * r2 * r3).simplify()),
-        Latex.math_mode(sympy.sqrt(b1**2 * base + b2**2 * base + b3**2 * base)),
-        Latex.math_mode(sympy.Number(b1**2 * base + b2**2 * base + b3**2 * base)),
-        Latex.math_mode(sympy.Number(base))
+        Latex.math_mode(simplify(r1 + r2 + r3)),
+        Latex.math_mode(simplify(r1 * r2 * r3)),
+        Latex.math_mode(simplify(sqrt(b1**2 * base + b2**2 * base + b3**2 * base))),
+        Latex.math_mode(simplify(Number(b1**2 * base + b2**2 * base + b3**2 * base))),
+        Latex.math_mode(simplify(Number(base)))
       ],
       'alternatives_identifiers': [
-        [str(r1 + r2 + r3)],
-        [str(r1 * r2 * r3)],
-        [str(sympy.sqrt(b1**2 * base + b2**2 * base + b3**2 * base))],
+        [str(simplify(r1 + r2 + r3))],
+        [str(simplify(r1 * r2 * r3))],
+        [str(simplify(sqrt(b1**2 * base + b2**2 * base + b3**2 * base)))],
         [str(b1**2 * base + b2**2 * base + b3**2 * base)],
         [str(base)],
       ],
