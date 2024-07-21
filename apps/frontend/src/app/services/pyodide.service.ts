@@ -6,6 +6,12 @@ import { firstValueFrom } from 'rxjs';
 import type { FilteredColumnsByArray } from '../../types/dictionary';
 import { environment } from '../../environments/environment';
 import type { loadPyodide as LoadPyodide } from 'pyodide';
+import { getPromise } from '../utils/promise';
+
+declare global {
+  // eslint-disable-next-line no-var
+  var loadPyodide: typeof LoadPyodide
+}
 
 interface Columns {
   id: number;
@@ -20,17 +26,21 @@ interface Columns {
   providedIn: 'root'
 })
 export class PyodideService {
+  platform = inject(PLATFORM_ID);
+  private httpClient = inject(HttpClient);
+
   constructor() {
     if (isPlatformBrowser(this.platform)) {
       const script = document.createElement('script');
       script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js';
+      script.onload = () => {
+        this.pyodideScriptIsLoading = false;
+      }
       document.head.appendChild(script);
     }
   }
 
-  platform = inject(PLATFORM_ID);
-  private httpClient = inject(HttpClient);
-
+  pyodideScriptIsLoading = true;
   private headerCode: undefined | string = undefined;
   async getHeaderCode() {
     if (typeof this.headerCode === 'string') return  this.headerCode;

@@ -46,7 +46,7 @@
         <button mat-flat-button class="" (click)="this.save()" [disabled]="!this.canBeEdited">Save</button>
       }
       @else {
-        <button mat-flat-button class="" (click)="this.test()" [disabled]="!this.canBeEdited">Test</button>
+        <button mat-flat-button class="" (click)="this.test()" [disabled]="!this.canBeEdited || this.pyodide.pyodideScriptIsLoading">Test</button>
       }
       
       <a mat-flat-button class="" href="/exercises"
