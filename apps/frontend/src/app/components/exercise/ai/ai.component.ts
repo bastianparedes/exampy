@@ -10,6 +10,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-ai',
@@ -19,7 +20,8 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
-    MatInputModule
+    MatInputModule,
+    TranslateModule
   ],
   templateUrl: './ai.component.html',
   styleUrl: './ai.component.scss'

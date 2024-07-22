@@ -17,6 +17,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import type { PageEvent } from '@angular/material/paginator';
 import { ProgressComponent } from '../../components/common/progress/progress.component';
 import { ExerciseService } from '../../services/exercise.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Exercises {
   id: number;
@@ -38,7 +39,8 @@ interface Exercises {
     MatFormFieldModule,
     LoaderComponent,
     MatPaginatorModule,
-    ProgressComponent
+    ProgressComponent,
+    TranslateModule
   ],
 })
 export class CreateExamComponent implements OnInit {

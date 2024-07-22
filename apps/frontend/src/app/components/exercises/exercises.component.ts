@@ -9,6 +9,7 @@ import { LoaderComponent } from '../../components/common/loader/loader.component
 import { MatInputModule } from '@angular/material/input';
 import { PyodideService } from '../../services/pyodide.service';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 interface Exercise {
@@ -22,7 +23,7 @@ interface Exercise {
   selector: 'app-exercises',
   templateUrl: './exercises.component.html',
   standalone: true,
-  imports: [MatTableModule, MatCheckboxModule, MatIconModule, MatPaginatorModule, LoaderComponent, MatInputModule, DateComponent, MatButtonModule],
+  imports: [MatTableModule, MatCheckboxModule, MatIconModule, MatPaginatorModule, LoaderComponent, MatInputModule, DateComponent, MatButtonModule, TranslateModule],
 })
 export class ExercisesComponent implements OnInit {
   pyodide = inject(PyodideService);

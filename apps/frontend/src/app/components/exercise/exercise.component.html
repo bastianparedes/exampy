@@ -11,12 +11,12 @@
 <form class="w-full p-5" [formGroup]="exercise">
   <div>
     <mat-form-field class="w-full">
-      <mat-label>Name</mat-label>
+      <mat-label>{{ 'exercise.name' | translate }}</mat-label>
       <input matInput maxlength="100" placeholder="New Exercise" formControlName="name" />
     </mat-form-field>
 
     <mat-form-field class="w-full">
-      <mat-label>Description</mat-label>
+      <mat-label>{{ 'exercise.description' | translate }}</mat-label>
       <textarea
         matInput
         maxlength="200"
@@ -41,16 +41,16 @@
       
     </div>
     <div class="flex gap-5 mt-5">
-      <button mat-flat-button class="ai-button" (click)="this.openDialog()" [disabled]="!this.canBeEdited">Ask AI</button>
+      <button mat-flat-button class="ai-button" (click)="this.openDialog()" [disabled]="!this.canBeEdited">{{ 'exercise.askAi' | translate }}</button>
       @if (this.canBeSaved) {
-        <button mat-flat-button class="" (click)="this.save()" [disabled]="!this.canBeEdited">Save</button>
+        <button mat-flat-button class="" (click)="this.save()" [disabled]="!this.canBeEdited">{{ 'exercise.save' | translate }}</button>
       }
       @else {
-        <button mat-flat-button class="" (click)="this.test()" [disabled]="!this.canBeEdited || this.pyodide.pyodideScriptIsLoading">Test</button>
+        <button mat-flat-button class="" (click)="this.test()" [disabled]="!this.canBeEdited || this.pyodide.pyodideScriptIsLoading">{{ 'exercise.test' | translate }}</button>
       }
       
       <a mat-flat-button class="" href="/exercises"
-        >Cancel</a
+        >{{ 'exercise.cancel' | translate }}</a
       >
     </div>
   </div>

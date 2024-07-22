@@ -7,14 +7,26 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { provideClientHydration } from '@angular/platform-browser';
 
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { translateLoaderFactory } from './utils/i18n';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
-    importProvidersFrom(MonacoEditorModule.forRoot()), provideClientHydration(),
-    provideHttpClient(withFetch())
+    importProvidersFrom(MonacoEditorModule.forRoot()),
+    importProvidersFrom(TranslateModule.forRoot({
+      defaultLanguage: 'es',
+      loader: {
+          provide: TranslateLoader,
+          useFactory: translateLoaderFactory,
+          deps: [HttpClient]
+      }
+    })),
+    provideClientHydration(),
+    provideHttpClient(withFetch()),
+    
   ]
 };

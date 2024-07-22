@@ -21,6 +21,7 @@ import { LoaderComponent } from '../common/loader/loader.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Dialog } from '@angular/cdk/dialog';
 import { AiComponent } from './ai/ai.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-exercise',
@@ -32,7 +33,8 @@ import { AiComponent } from './ai/ai.component';
     FormsModule,
     ReactiveFormsModule,
     MonacoEditorModule,
-    LoaderComponent
+    LoaderComponent,
+    TranslateModule
   ],
   templateUrl: './exercise.component.html',
   styleUrl: './exercise.component.scss'

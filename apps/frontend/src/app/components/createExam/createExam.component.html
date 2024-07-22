@@ -10,12 +10,12 @@
     (click)="createTest()"
     [disabled]="!this.isAtLeastOneExerciseSelectedWithQuantityNotZero || this.exercises.selected.length === 0"
   >
-    Create test
+    {{ 'createExam.createExam' | translate }}
   </button>
   <div class="flex justify-between">
     <mat-form-field>
-      <mat-label>Filter</mat-label>
-      <input matInput maxlength="18" placeholder="Filter" [value]="this.filters.query" [disabled]="this.showLoader" (input)="this.handleQueryInput($event)" />
+      <mat-label>{{ 'createExam.filter' | translate }}</mat-label>
+      <input matInput maxlength="18" [value]="this.filters.query" [disabled]="this.showLoader" (input)="this.handleQueryInput($event)" />
     </mat-form-field>
     <mat-paginator
       #paginator
@@ -33,7 +33,7 @@
   </div>
   <div class="flex gap-10">
     <div class="flex-1">
-      <h2>Available</h2>
+      <h2>{{ 'createExam.available' | translate }}</h2>
       <div
         id="exercisesUnselected"
         cdkDropList
@@ -57,7 +57,7 @@
       </div>
     </div>
     <div class="flex flex-col flex-1">
-      <h2>Selected</h2>
+      <h2>{{ 'createExam.selected' | translate }}</h2>
       <div
         id="exercisesSelected"
         cdkDropList
@@ -71,13 +71,13 @@
             cdkDrag
             [cdkDragData]="exerciseSelected.id">
             <div>
-              <span>ID: {{ exerciseSelected.id }}</span>
+              <span>{{ 'createExam.id' | translate }}: {{ exerciseSelected.id }}</span>
             </div>
             <div>
-              <span>Name: {{ exerciseSelected.name }}</span>
+              <span>{{ 'createExam.name' | translate }}: {{ exerciseSelected.name }}</span>
             </div>
             <mat-form-field>
-              <mat-label>Quantity</mat-label>
+              <mat-label>{{ 'createExam.quantity' | translate }}</mat-label>
               <input
                 matInput
                 type="number"

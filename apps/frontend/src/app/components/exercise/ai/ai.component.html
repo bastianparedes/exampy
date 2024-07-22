@@ -1,17 +1,17 @@
 <form class="w-full h-full flex flex-col" [formGroup]="this.data">
-  <span>Describe the exercise you want</span>
-  <mat-form-field class="w-full h-full flex-1 mt-10">
-    <mat-label>Exercise description</mat-label>
+  <span>{{'exercise.ai.title' | translate}}</span>
+  <mat-form-field class="w-full h-full flex-1 mt-5">
+    <mat-label>{{'exercise.ai.description' | translate}}</mat-label>
     <textarea
       matInput
       maxlength="200"
       class="w-full h-full"
-      placeholder="Se da una función de parábola y se piden las coordenadas del vértice"
+      placeholder="{{'exercise.ai.placeholder' | translate}}"
       formControlName="text"
     ></textarea>
   </mat-form-field>
   <div class="flex gap-5">
-    <button mat-flat-button (click)="this.closeWithText()">OK</button>
-    <button mat-flat-button (click)="this.closeEmpty()">Cancel</button>
+    <button mat-flat-button (click)="this.closeWithText()">{{'exercise.ai.ok' | translate}}</button>
+    <button mat-flat-button (click)="this.closeEmpty()">{{'exercise.ai.cancel' | translate}}</button>
   </div>
 </form>

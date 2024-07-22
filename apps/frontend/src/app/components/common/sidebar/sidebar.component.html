@@ -5,23 +5,23 @@
         <button class="log" disabled><mat-spinner diameter="20"></mat-spinner></button>
       }
       @else if (this.auth.isAuthenticated === true) {
-        <a class="log" href="/api/auth/logout">Log out</a>
+        <a class="log" href="/api/auth/logout">{{ 'nav.logout' | translate }}</a>
       }
       @else if (this.auth.isAuthenticated === false) {
-        <a class="log" href="/api/auth/login">Log in</a>
+        <a class="log" href="/api/auth/login">{{ 'nav.login' | translate }}</a>
       }
     </li>
     <li class="">
-      <a class="link" href="/">Home</a>
+      <a class="link" href="/">{{ 'nav.home' | translate }}</a>
     </li>
     <li>
-      <a class="link" href="/exercises">Exercises</a>
+      <a class="link" href="/exercises">{{ 'nav.exercises' | translate }}</a>
     </li>
     <li>
-      <a class="link" href="/create_exam">Create exam</a>
+      <a class="link" href="/create_exam">{{ 'nav.createExam' | translate }}</a>
     </li>
     <li>
-      <a class="link" href="/tutorial">Help</a>
+      <a class="link" href="/tutorial">{{ 'nav.help' | translate }}</a>
     </li>
   </ul>
 </nav>

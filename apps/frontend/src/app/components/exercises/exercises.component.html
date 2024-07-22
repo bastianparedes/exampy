@@ -6,8 +6,8 @@
     <div class="flex justify-between">
       <a mat-flat-button href="/exercise">+ Create Exercise</a>
       <mat-form-field>
-        <mat-label>Filter</mat-label>
-        <input matInput maxlength="18" placeholder="Filter" [value]="this.filters.query" [disabled]="this.isLoading" (input)="this.handleQueryInput($event)" />
+        <mat-label>{{ 'exercises.filter' | translate }}</mat-label>
+        <input matInput maxlength="18" [value]="this.filters.query" [disabled]="this.isLoading" (input)="this.handleQueryInput($event)" />
       </mat-form-field>
     </div>
     <table
@@ -16,35 +16,35 @@
       [dataSource]="exercises"
       class="mat-elevation-z8">
       <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'exercises.id' | translate }}</th>
         <td mat-cell *matCellDef="let exercise">
           <a href="/exercise/{{ exercise.id }}">{{ exercise.id }}</a>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'exercises.name' | translate }}</th>
         <td mat-cell *matCellDef="let exercise">
           <a href="/exercise/{{ exercise.id }}">{{ exercise.name }}</a>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="description">
-        <th mat-header-cell *matHeaderCellDef>Description</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'exercises.description' | translate }}</th>
         <td mat-cell *matCellDef="let exercise">
           <a href="/exercise/{{ exercise.id }}">{{ exercise.description }}</a>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="last_modified_date">
-        <th mat-header-cell *matHeaderCellDef>Last Modified</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'exercises.lastModified' | translate }}</th>
         <td mat-cell *matCellDef="let exercise">
           <a href="/exercise/{{ exercise.id }}"><app-date [stringDate]="exercise.last_modified_date"></app-date></a>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="code">
-        <th mat-header-cell *matHeaderCellDef>Code</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'exercises.code' | translate }}</th>
         <td mat-cell *matCellDef="let exercise">
           <a href="/exercise/{{ exercise.id }}"
             ><mat-icon>edit_square</mat-icon></a

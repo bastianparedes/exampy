@@ -1,0 +1,39 @@
+{
+  "nav": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "home": "Home",
+    "exercises": "Ejercicios",
+    "createExam": "Crear examen",
+    "help": "Ayuda"
+  },
+  "exercises": {
+    "filter": "Filtro",
+    "id": "ID",
+    "name": "Nombre",
+    "description": "Descripción",
+    "lastModified": "Última modificación",
+    "code": ""
+  },
+  "exercise": {
+    "name": "Nombre",
+    "description": "Descripción",
+    "askAi": "Inteligencia artificial",
+    "test": "Tetear",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "ai": {
+      "title": "Describe el ejercicio que quieres",
+      "description": "Descripción",
+      "placeholder": "Ejemplo: Se da una función de parábola y se piden las coordenadas del vértice",
+      "ok": "Ayúdame!",
+      "cancel": "Cancelar"
+    }
+  },
+  "createExam": {
+    "createExam": "Crear examen",
+    "filter": "Filtro",
+    "available": "Disponible",
+    "selected": "Seleccionado"
+  }
+}

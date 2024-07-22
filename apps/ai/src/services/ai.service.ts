@@ -40,8 +40,8 @@ export class AiService {
     const response = await generateText({
       model: google('models/gemini-1.5-pro-latest'),
       prompt: completePrompt,
-      maxTokens: 20000,
-      temperature: 0.2,
+      maxTokens: Math.trunc(1000000 / 15),
+      temperature: 0.1,
       maxRetries: 5,
     });
 

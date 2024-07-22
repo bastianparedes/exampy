@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AuthService } from '../../../services/auth.service'
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [MatIconModule, MatProgressSpinnerModule],
+  imports: [MatProgressSpinnerModule, TranslateModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })

@@ -24,6 +24,8 @@
     "@angular/router": "^18.0.0",
     "@angular/ssr": "^18.0.5",
     "@ngstack/code-editor": "^7.2.0",
+    "@ngx-translate/core": "^15.0.0",
+    "@ngx-translate/http-loader": "^8.0.0",
     "ajv": "^8.17.1",
     "express": "^4.18.2",
     "monaco-editor": "^0.49.0",
