@@ -1,5 +1,5 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformServer } from '@angular/common';
+import { isPlatformServer, isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -27,10 +27,12 @@ export class AuthService {
   userDataPromise = this.promiseData.then((data) => data.user_data);
 
   constructor() {
-    this.promiseData.then((userData) => {
-      this.isAuthenticated = userData.authenticated
-      this.userData = userData.user_data;
-    });
+    if (isPlatformBrowser(this.platform)) {
+      this.promiseData.then((userData) => {
+        this.isAuthenticated = userData.authenticated
+        this.userData = userData.user_data;
+      });
+    }
   }
 
   async getUserData() {

@@ -1,57 +1,27 @@
-<aside class="p-2">
-  <nav>
-    <ul>
-      <li>
-        <a href="/"
-          ><mat-icon style="font-size: 4rem; width: 4rem; height: 4rem"
-            >home</mat-icon
-          ></a
-        >
-      </li>
-      <li>
-        <a href="/exercises"
-          ><mat-icon style="font-size: 4rem; width: 4rem; height: 4rem"
-            >lists</mat-icon
-          ></a
-        >
-      </li>
-      @if (this.auth.isAuthenticated) {
-        <li>
-          <a href="/exercise"
-            ><mat-icon style="font-size: 4rem; width: 4rem; height: 4rem"
-              >playlist_add</mat-icon
-            ></a
-          >
-        </li>
+<nav class="bg-black">
+  <ul class="flex py-5 px-16 gap-5 items-center">
+    <li class="flex-1">
+      @if (this.auth.isAuthenticated === undefined) {
+        <button class="log" disabled><mat-spinner diameter="20"></mat-spinner></button>
       }
-      <li>
-        <a href="/create_exam"
-          ><mat-icon style="font-size: 4rem; width: 4rem; height: 4rem"
-            >construction</mat-icon
-          ></a
-        >
-      </li>
-      <li>
-        <a href="/tutorial"
-          ><mat-icon style="font-size: 4rem; width: 4rem; height: 4rem"
-            >help</mat-icon
-          ></a
-        >
-      </li>
-      <li>
-        @if (this.auth.isAuthenticated === true) {
-          <a href="/api/auth/logout">
-            <mat-icon style="font-size: 4rem; width: 4rem; height: 4rem">logout</mat-icon>
-          </a>
-        }
-        @else {
-          <a href="/api/auth/login">
-            <mat-icon style="font-size: 4rem; width: 4rem; height: 4rem">login</mat-icon>
-          </a>
-        }
-      </li>
-      <li>
-      </li>
-    </ul>
-  </nav>
-</aside>
+      @else if (this.auth.isAuthenticated === true) {
+        <a class="log" href="/api/auth/logout">Log out</a>
+      }
+      @else if (this.auth.isAuthenticated === false) {
+        <a class="log" href="/api/auth/login">Log in</a>
+      }
+    </li>
+    <li class="">
+      <a class="link" href="/">Home</a>
+    </li>
+    <li>
+      <a class="link" href="/exercises">Exercises</a>
+    </li>
+    <li>
+      <a class="link" href="/create_exam">Create exam</a>
+    </li>
+    <li>
+      <a class="link" href="/tutorial">Help</a>
+    </li>
+  </ul>
+</nav>

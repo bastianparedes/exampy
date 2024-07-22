@@ -7,6 +7,7 @@ import { SidebarComponent } from './components/common/sidebar/sidebar.component'
   standalone: true,
   imports: [RouterOutlet, SidebarComponent],
   templateUrl: './app.component.html',
+  styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
   router = inject(Router);

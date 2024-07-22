@@ -1,0 +1,30 @@
+.link {
+  height: 2rem;
+  color: #fff;
+  border-radius: 10rem;
+  padding: 0.5rem 0.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: #008d8d;
+  }
+}
+
+.log {
+  width: 6rem;
+  height: 2rem;
+  color: #fff;
+  border-radius: 10rem;
+  padding: 0.5rem 0.7rem;
+  background-color: #008d8d;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:disabled {
+    background-color: #959595;
+    color: #e4e4e4;
+  }
+}
