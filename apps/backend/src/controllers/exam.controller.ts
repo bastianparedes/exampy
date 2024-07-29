@@ -1,6 +1,6 @@
 import { Controller, Inject, Post, Body, Req, Res, Get } from '@nestjs/common';
 import { AiService } from '../services/ai.service';
-/* import { DbService } from '../services/db'; */
+import { DbService } from '../services/db';
 import { LatexService } from '../services/latex.service';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { AuthService } from '../services/auth.service';
@@ -64,8 +64,8 @@ class BodyValidator {
 
 @Controller('exam')
 export class ExamController {
-  /* @Inject(DbService)
-  dbService = new DbService(); */
+  @Inject(DbService)
+  dbService = new DbService();
 
   @Inject(AiService)
   aiService = new AiService();
@@ -130,22 +130,14 @@ export class ExamController {
     const pdfUrl = new URL(
       await this.latexService.getPdfUrl(completeLatexCode),
     );
-    if (!pdfUrl.href.endsWith('.pdf')) return res.status(500).send(pdfUrl);
+    if (!pdfUrl.href.endsWith('.pdf')) return res.status(500).send(pdfUrl.href);
 
     const pathSections = pdfUrl.pathname.split('/');
     const lastPathSection = pathSections[pathSections.length - 1];
 
     res.send(lastPathSection);
-
-    /* const accessToken = req.cookies['access_token'] as string | undefined;
-    if (accessToken !== undefined) {
-      const userData = this.authService.getGithubUserData(accessToken);
-      if (userData !== null) {
-        await this.dbService.db.insert(this.dbService.schema.Exams).values({
-          url: pdfUrl,
-          userId: (await userData).id,
-        });
-      }
-    } */
+    await this.dbService.db.insert(this.dbService.schema.Exams).values({
+      name: lastPathSection,
+    });
   }
 }

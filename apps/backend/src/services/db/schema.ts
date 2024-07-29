@@ -1,4 +1,5 @@
-import { timestamp, pgTable, serial, text, integer } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
+import { timestamp, pgTable, text, integer } from 'drizzle-orm/pg-core';
 
 export const Users = pgTable('users', {
   id: integer('id').primaryKey(),
@@ -7,12 +8,17 @@ export const Users = pgTable('users', {
 });
 
 export const Exams = pgTable('exams', {
-  id: serial('id').notNull().primaryKey(),
-  url: text('url').notNull(),
+  name: text('name').notNull().primaryKey(),
   createdAt: timestamp('created_at').defaultNow(),
   userId: integer('user_id')
-    .notNull()
+    .default(null)
     .references(() => Users.id),
 });
 
-// export const usersRelations =
+export const UsersRelations = relations(Users, ({ many }) => ({
+  Posts: many(Exams),
+}));
+
+export const ExamsRelations = relations(Exams, ({ one }) => ({
+  Users: one(Users, { fields: [Exams.userId], references: [Users.id] }),
+}));
