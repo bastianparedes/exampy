@@ -1,0 +1,22 @@
+workspaces:
+
+  main:
+    path: ./
+    tasks:
+      - install: "npm install"
+
+  backend:
+    path: ./apps/backend
+    tasks:
+      - install: "npm install"
+      - lint: "npm run lint"
+      - lint:fix: "npm run lint:fix"
+      - test: "npm run test"
+
+  frontend:
+    path: ./apps/frontend
+    tasks:
+      - install: "npm install"
+      - lint: "npm run lint"
+      - lint:fix: "npm run lint:fix"
+      - test: "npm run test"

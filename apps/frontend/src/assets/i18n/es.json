@@ -1,0 +1,36 @@
+{
+  "nav": {
+    "exampy": "Exampy",
+    "home": "Home",
+    "exercises": "Ejercicios",
+    "createExam": "Crear examen",
+    "help": "Ayuda",
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión"
+  },
+  "home": {
+    "title1": "Por un profesor, para profesores",
+    "title2": "Construye tus exámenes más rápido con inteligencia artificial. Ingresa los ejercicios que quieres, su cantidad y recibe tu documento en segundos!",
+    "callToAction": "Empieza ahora"
+  },
+  "createExam": {
+    "title": "Crea tu examen!",
+    "description1": "Puedes crear exámenes escolares con tres tipos de secciones: selección única, desarrollo y verdadero o falso. Para empezar, ingresa las descripciones de los ejercicios y especifica la cantidad deseada para cada uno, con un máximo de 10.",
+    "description2": "Es importante que cada descripción contenga contenido significativo para asegurar la calidad del examen. Ten en cuenta que la generación del examen puede tardar hasta 1 minuto, pero una vez completada, podrás ver el resultado al final de la página web. ¡Gracias por usar esta aplicación y espero que disfrutes creando tus exámenes!",
+    "createExam": "Crear examen",
+    "creatingExam": "Creando examen",
+    "exercises": "Ejercicios",
+    "description": "Descripción",
+    "quantity": "Cantidad",
+    "example": "Se da una función cuadrática y se pide el vértice de la parábola",
+    "addRow": "Agregar ejercicio",
+    "uniqueSelection": "Selección única",
+    "development": "Desarrollo",
+    "trueOrFalse": "Verdadero o Falso",
+    "close": "Cerrar",
+    "initExamCreation": "Creando examen, eso puede demorar...",
+    "examCreationFailed": "Ocurrió un error creando el examen. Inténtalo más tarde",
+    "examCreationSucceded": "Examen creado con éxito!",
+    "openDocument": "Ver documento"
+  }
+}
