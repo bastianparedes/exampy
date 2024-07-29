@@ -1,0 +1,48 @@
+version: "3.9"
+services:
+
+  database:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_HOST: ${DATABASE_HOST:-localhost}
+      POSTGRES_USER: ${DATABASE_USER:-postgres}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-12345678}
+      POSTGRES_DB: ${DATABASE_NAME:-postgres}
+    volumes:
+      - ./apps/backend/src/services/db/seed.sql:/docker-entrypoint-initdb.d/seed.sql
+
+  frontend:
+    build:
+      context: ./apps/frontend
+      dockerfile: Dockerfile
+    image: exampy/frontend
+    ports:
+      - "4200:4200"
+    volumes:
+      - /app/node_modules
+      - ./apps/frontend:/app
+
+  backend:
+    build:
+      context: ./apps/backend
+      dockerfile: Dockerfile
+    image: exampy/backend
+    environment:
+      ADDRESS: ${IP:-0.0.0.0}
+      GOOGLE_GENERATIVE_AI_API_KEY: ${GOOGLE_GENERATIVE_AI_API_KEY:?error}
+      DATABASE_PROTOCOL: ${DATABASE_PROTOCOL:-postgresql}
+      DATABASE_USER: ${DATABASE_USER:-postgres}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-12345678}
+      DATABASE_HOST: ${DATABASE_HOST:-database}
+      DATABASE_PORT: ${DATABASE_PORT:-5432}
+      DATABASE_NAME: ${DATABASE_NAME:-postgres}
+      DATABASE_SSL_MODE: ${DATABASE_SSL_MODE:-disable}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+    volumes:
+      - /app/node_modules
+      - ./apps/backend:/app

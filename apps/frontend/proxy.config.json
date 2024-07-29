@@ -1,0 +1,18 @@
+{
+  "/api/pdf/**": {
+    "target": "https://texlive.net",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "/api/pdf": "/latexcgi"
+    }
+  },
+  "/api/**": {
+    "target": "http://backend:3000",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
