@@ -3,7 +3,7 @@ import { AiService } from '../services/ai.service';
 import { DbService } from '../services/db';
 import { LatexService } from '../services/latex.service';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { AuthService } from '../services/auth.service';
+/* import { AuthService } from '../services/auth.service'; */
 import {
   IsInt,
   Max,
@@ -73,8 +73,8 @@ export class ExamController {
   @Inject(LatexService)
   latexService = new LatexService();
 
-  @Inject(AuthService)
-  authService = new AuthService();
+  /* @Inject(AuthService)
+  authService = new AuthService(); */
 
   @Get()
   async getHealth() {
