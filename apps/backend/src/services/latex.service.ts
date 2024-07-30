@@ -32,6 +32,7 @@ export class LatexService {
 \\usetikzlibrary{fit, shapes.geometric, quotes, angles, through, intersections}%
 \\renewcommand{\\[}{\\begin{math}} \\renewcommand{\\]}{\\end{math}}%
 \\renewcommand{\\frac}{\\dfrac}%
+\\usepackage[strings]{underscore}%
   `.trim();
 
   studentDataTable = `
@@ -80,7 +81,7 @@ export class LatexService {
 
       shuffledArray.forEach((answer) => {
         questionsLatex.push('\\item%');
-        questionsLatex.push('\\adjustbox{valign=m}{%');
+        questionsLatex.push('\\adjustbox{valign=t}{%');
         questionsLatex.push(answer.trim() + '%');
         questionsLatex.push('}%');
       });
@@ -131,7 +132,7 @@ export class LatexService {
       questionsLatex.push('\\hfill \\break%');
 
       correctAnswersLatex.push('\\item%');
-      correctAnswersLatex.push('\\adjustbox{valign=m}{%');
+      correctAnswersLatex.push('\\adjustbox{valign=t}{%');
       correctAnswersLatex.push(exercise.answer.trim() + '%');
       correctAnswersLatex.push('}%');
     });

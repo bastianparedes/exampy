@@ -4,84 +4,39 @@ import { generateText } from 'ai';
 import { google } from '@ai-sdk/google';
 import { load } from 'js-yaml';
 import type { ExercisesDescription, ExercisesLatex } from '../types/exercise';
+import { writeFileSync } from 'fs';
 
 const yamlExampleUniqueSelection = `
 uniqueSelection:
   - question: >
-      Encuentra las soluciones al sistema de ecuaciones:
-      $\\begin{cases}
-      x + y = 5 \\\\ x - y = 1
-      \\end{cases}$
+      Primera parte de la pregunta
+      Segunda parte de la pregunta
     answers:
       - >
-        $\\left(3,2\\right)$
+        Respuesta correcta
       - >
-        $\\left(2,3\\right)$
+        Contenido de la segunda alternativa
       - >
-        $\\left(1,5\\right)$
+        Contenido de la tercera alternativa
       - >
-        $\\left(4,-1\\right)$
+        Contenido de la cuarta alternativa
       - >
-        $\\left(6,4\\right)$
-  - question: >
-      ¿Cuál de los siguientes gráficos corresponse a una función cuadrática?
-    answers:
-      - >
-        \\begin{tikzpicture}
-        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
-        \\addplot[draw=red] {x^2};
-        \\end{axis}
-        \\end{tikzpicture}
-      - >
-        \\begin{tikzpicture}
-        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
-        \\addplot[draw=red] {x*2};
-        \\end{axis}
-        \\end{tikzpicture}
-      - >
-        \\begin{tikzpicture}
-        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
-        \\addplot[draw=red] {x^3};
-        \\end{axis}
-        \\end{tikzpicture}
-      - >
-        \\begin{tikzpicture}
-        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
-        \\addplot[draw=red] {x*3-4};
-        \\end{axis}
-        \\end{tikzpicture}
-      - >
-        \\begin{tikzpicture}
-        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
-        \\addplot[draw=red] {ln(x)};
-        \\end{axis}
-        \\end{tikzpicture}
+        Contenido de la quinta alternativa
 `.trim();
 
 const yamlExampleDevelopment = `
 development:
   - question: >
-      $\\dfrac{3}{4} - \\dfrac{5}{6} \\cdot \\dfrac{1}{2}=$
+      Pregunta que se debe responder
     answer: >
-      $\\dfrac{1}{3}$
-  - question: >
-      Haz un gráfico de función. $f(x)={x}^{2}$
-    answer: >
-      \\begin{tikzpicture}
-      \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
-      \\addplot[draw=red] {x^2};
-      \\end{axis}
-      \\end{tikzpicture}
+      Respuesta correcta
 `.trim();
 
 const yamlExampleTrueOrFalse = `
 trueOrFalse:
   - question: >
-      El resultado de multiplicar dos números negativos es siempre un número negativo
+      Esta afirmación que puede ser verdadera o falsa
     answer: false
-  - question: >
-      La gráfica de la función $f(x)={x}^{2}$ intercecta al eje X en un único punto
-    answer: true
 `.trim();
 
 @Injectable()
@@ -157,6 +112,12 @@ export class AiService {
     const match = response.text.match(/```yaml([\s\S]*?)```/);
     const text = match?.[1] ?? response.text;
     const exercisesFromIa: ExercisesLatex = load(text);
+
+    if (process.env.NODE_ENV === 'development') {
+      writeFileSync('latex.yaml', text, 'utf-8');
+      writeFileSync('latex.json', JSON.stringify(exercisesFromIa), 'utf-8');
+    }
+
     return exercisesFromIa;
   }
 }

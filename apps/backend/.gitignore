@@ -56,5 +56,6 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 #LaTeX
-*.tex
-*.latex
+latex.json
+latex.yaml
+latex.tex
