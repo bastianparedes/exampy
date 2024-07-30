@@ -10,7 +10,7 @@ input {
   padding: 4rem 5rem;
   border: none;
   outline: none;
-  color: #FFF;
+  color: #fff;
   cursor: pointer;
   position: relative;
   z-index: 0;
@@ -18,7 +18,7 @@ input {
   text-wrap: nowrap;
 
   &::after {
-    content: "";
+    content: '';
     z-index: -1;
     position: absolute;
     width: 100%;
@@ -30,11 +30,17 @@ input {
   }
 
   &::before {
-    content: "";
+    content: '';
     background: linear-gradient(
       45deg,
-      #FF0000, #FF7300, #FFFB00, #48FF00,
-      #00FFD5, #002BFF, #FF00C8, #FF0000
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #ff00c8,
+      #ff0000
     );
     position: absolute;
     top: -1.5rem;
@@ -42,26 +48,31 @@ input {
     background-size: 600%;
     z-index: -1;
     width: calc(100% + 3rem);
-    height:  calc(100% + 3rem);
+    height: calc(100% + 3rem);
     filter: blur(8px);
     animation: glowing 20s linear infinite;
-    transition: opacity .3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
     border-radius: 10px;
   }
-  
+
   @keyframes glowing {
-    0% {background-position: 0 0;}
-    50% {background-position: 400% 0;}
-    100% {background-position: 0 0;}
+    0% {
+      background-position: 0 0;
+    }
+    50% {
+      background-position: 400% 0;
+    }
+    100% {
+      background-position: 0 0;
+    }
   }
 
   &:active:after {
     background: transparent;
   }
-  
+
   &:active {
     color: #000;
     font-weight: bold;
   }
-
 }

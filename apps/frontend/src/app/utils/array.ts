@@ -1,22 +1,24 @@
 const everyElementIsDifferent = <T>(array: T[]) => {
   const set = new Set();
   for (const element of array) {
-      const serializedElement = JSON.stringify(element);
-      if (set.has(serializedElement)) {
-          return false;
-      }
-      set.add(serializedElement);
+    const serializedElement = JSON.stringify(element);
+    if (set.has(serializedElement)) {
+      return false;
+    }
+    set.add(serializedElement);
   }
   return true;
-}
+};
 
 const arrayIncludesElement = <T, U>(array: T[], element: U) => {
   return array.some(item => {
     return JSON.stringify(item) === JSON.stringify(element);
   });
-}
+};
 
-function arraysAreEqual<T extends (string | number | boolean | undefined | null)[]>(array1: T, array2: T) {
+function arraysAreEqual<
+  T extends (string | number | boolean | undefined | null)[],
+>(array1: T, array2: T) {
   if (array1.length !== array2.length) {
     return false;
   }
@@ -31,8 +33,8 @@ function arraysAreEqual<T extends (string | number | boolean | undefined | null)
 
 function shuffleArray<T>(array: T[]): T[] {
   for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
   return array;
 }
@@ -52,4 +54,11 @@ function createArrayUpToNumber(number: number): number[] {
   return Array.from({ length: number + 1 }, (_, index) => index);
 }
 
-export { everyElementIsDifferent, arrayIncludesElement, arraysAreEqual, shuffleArray, reorderArrayByIndexes, createArrayUpToNumber };
+export {
+  everyElementIsDifferent,
+  arrayIncludesElement,
+  arraysAreEqual,
+  shuffleArray,
+  reorderArrayByIndexes,
+  createArrayUpToNumber,
+};

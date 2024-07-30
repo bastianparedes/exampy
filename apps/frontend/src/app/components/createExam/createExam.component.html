@@ -1,22 +1,24 @@
 <div class="px-2 md:px-10">
-  <h1 class="text-6xl text-center my-10">{{ 'createExam.title' | translate }}</h1>
+  <h1 class="text-6xl text-center my-10">
+    {{ 'createExam.title' | translate }}
+  </h1>
   <p class="mb-3">{{ 'createExam.description1' | translate }}</p>
   <p>{{ 'createExam.description2' | translate }}</p>
-  <div class="relative h-10 flex justify-around mt-10 text-white text-xs sm:text-base sm:h-12">
+  <div
+    class="relative h-10 flex justify-around mt-10 text-white text-xs sm:text-base sm:h-12">
     <button
       class="h-full flex flex-row text-nowrap gap-2 justify-center items-center bg-blue-700 rounded-3xl px-3 disabled:bg-gray-500 disabled:text-gray-300 sm:p-3 sm:w-52"
       [disabled]="this.isCreatingPdf"
-      (click)="this.setExample()"
-    >
+      (click)="this.setExample()">
       Cargar ejemplo
     </button>
     <button
       class="h-full flex flex-row text-nowrap gap-2 justify-center items-center bg-blue-700 w-40 rounded-3xl px-3 disabled:bg-gray-500 disabled:text-gray-300 sm:p-3 sm:w-52"
       (click)="this.createTest()"
-      [disabled]="!this.getExamCanBeCreated()"
-    >
+      [disabled]="!this.getExamCanBeCreated()">
       @if (this.isCreatingPdf) {
-        <mat-spinner diameter="20"></mat-spinner>{{ 'createExam.creatingExam' | translate }}
+        <mat-spinner diameter="20"></mat-spinner
+        >{{ 'createExam.creatingExam' | translate }}
       } @else {
         {{ 'createExam.createExam' | translate }}
       }
@@ -26,26 +28,22 @@
   <div class="flex flex-col gap-8 py-10">
     @for (section of this.sections; track $index) {
       <section class="bg-slate-100 px-7 py-3 shadow-gray-500 shadow-lg">
-        <h2 class="mb-3 text-2xl">{{ ('createExam.' + section) | translate }}</h2>
+        <h2 class="mb-3 text-2xl">{{ 'createExam.' + section | translate }}</h2>
         <div class="flex flex-col">
           @for (exercise of this.exercises[section]; track $index) {
-            <div
-              class="py-0 px-0 flex flex-col md:flex-row md:gap-5"
-            >
+            <div class="py-0 px-0 flex flex-col md:flex-row md:gap-5">
               <mat-form-field class="border-none w-full" appearance="outline">
                 <input
                   matInput
                   maxlength="200"
                   placeholder="{{ 'createExam.example' | translate }}"
                   [value]="exercise.description"
-                  (input)="this.handleDescriptionInput($event, section, $index)"
-                />
+                  (input)="
+                    this.handleDescriptionInput($event, section, $index)
+                  " />
               </mat-form-field>
               <div class="flex justify-between md:gap-5">
-                <mat-form-field
-                  class="w-24"
-                  appearance="outline"
-                >
+                <mat-form-field class="w-24" appearance="outline">
                   <input
                     matInput
                     type="number"
@@ -53,8 +51,7 @@
                     max="10"
                     (keydown)="this.updateQuantityWithKeyboard($event)"
                     [value]="exercise.quantity"
-                    (input)="this.updateQuantity($event, section, $index)"
-                  />
+                    (input)="this.updateQuantity($event, section, $index)" />
                 </mat-form-field>
                 <button mat-fab (click)="deleteRow(section, $index)">
                   <mat-icon>delete</mat-icon>
@@ -67,18 +64,18 @@
           mat-flat-button
           class="w-fit"
           color="accent"
-          (click)="this.addRow(section)"
-        >
+          (click)="this.addRow(section)">
           {{ 'createExam.addRow' | translate }}
         </button>
       </section>
     }
   </div>
-  
 
   <div id="exam-pdf" class="relative w-full px-5 flex justify-center">
     @if (this.pdfUrl !== undefined && !this.isCreatingPdf) {
-      <a class="open-document" [href]="this.pdfUrl" target="_blank">{{ 'createExam.openDocument' | translate }}</a>
+      <a class="open-document" [href]="this.pdfUrl" target="_blank">{{
+        'createExam.openDocument' | translate
+      }}</a>
     }
   </div>
 </div>

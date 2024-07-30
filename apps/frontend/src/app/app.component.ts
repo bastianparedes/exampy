@@ -7,7 +7,7 @@ import { NavComponent } from './components/common/nav/nav.component';
   standalone: true,
   imports: [RouterOutlet, NavComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent implements OnInit {
   router = inject(Router);
@@ -15,9 +15,11 @@ export class AppComponent implements OnInit {
   showNav = false;
 
   ngOnInit() {
-    this.router.events.subscribe((event) => {
+    this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.showNav = this.pathsToShowNav.some((path) => event.urlAfterRedirects.includes(path));
+        this.showNav = this.pathsToShowNav.some(path =>
+          event.urlAfterRedirects.includes(path)
+        );
       }
     });
   }

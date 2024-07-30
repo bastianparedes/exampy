@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
   selector: 'app-date',
   standalone: true,
   imports: [],
-  templateUrl: './date.component.html'
+  templateUrl: './date.component.html',
 })
 export class DateComponent implements OnInit {
   @Input({ required: true }) stringDate!: string;
@@ -18,7 +18,7 @@ export class DateComponent implements OnInit {
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit'
+      second: '2-digit',
     }).format(new Date(this.stringDate));
   }
 }

@@ -1,4 +1,8 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -16,16 +20,17 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideAnimationsAsync(),
     importProvidersFrom(),
-    importProvidersFrom(TranslateModule.forRoot({
-      defaultLanguage: 'es',
-      loader: {
+    importProvidersFrom(
+      TranslateModule.forRoot({
+        defaultLanguage: 'es',
+        loader: {
           provide: TranslateLoader,
           useFactory: translateLoaderFactory,
-          deps: [HttpClient]
-      }
-    })),
+          deps: [HttpClient],
+        },
+      })
+    ),
     provideClientHydration(),
     provideHttpClient(withFetch()),
-    
-  ]
+  ],
 };

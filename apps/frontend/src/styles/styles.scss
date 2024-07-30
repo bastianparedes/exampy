@@ -3,22 +3,24 @@
 
 @include mat.core();
 
-
 @font-face {
   font-family: rexlia;
-  src: url('https://exampy.bastianparedes.com/assets/fonts/rexlia.otf') format('opentype');
+  src: url('https://exampy.bastianparedes.com/assets/fonts/rexlia.otf')
+    format('opentype');
 }
 
-$frontend-theme: mat.define-theme((
-  color: (
-    theme-type: light,
-    primary: mat.$azure-palette,
-    tertiary: mat.$blue-palette,
-  ),
-  density: (
-    scale: 0,
+$frontend-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    density: (
+      scale: 0,
+    ),
   )
-));
+);
 
 :root {
   @include mat.all-component-themes($frontend-theme);
@@ -28,7 +30,8 @@ $frontend-theme: mat.define-theme((
   font-family: rexlia;
 }
 
-html, body {
+html,
+body {
   scroll-behavior: smooth;
   height: 100%;
   margin: 0;
