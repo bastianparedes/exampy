@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LoaderComponent } from '../../components/common/loader/loader.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -37,6 +39,8 @@ interface Exercise {
     TranslateModule,
     MatProgressSpinnerModule,
     SkeletonComponent,
+    MatSelectModule,
+    MatCheckboxModule
   ],
 })
 export class CreateExamComponent {

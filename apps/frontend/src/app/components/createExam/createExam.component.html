@@ -1,4 +1,4 @@
-<div class="px-2 md:px-10">
+<div class="px-2 md:px-5">
   <h1 class="text-6xl text-center my-10">
     {{ 'createExam.title' | translate }}
   </h1>
@@ -25,52 +25,67 @@
     </button>
   </div>
 
-  <div class="flex flex-col gap-8 py-10">
-    @for (section of this.sections; track $index) {
-      <section class="bg-slate-100 px-7 py-3 shadow-gray-500 shadow-lg">
-        <h2 class="mb-3 text-2xl">{{ 'createExam.' + section | translate }}</h2>
-        <div class="flex flex-col">
-          @for (exercise of this.exercises[section]; track $index) {
-            <div class="py-0 px-0 flex flex-col md:flex-row md:gap-5">
-              <mat-form-field class="border-none w-full" appearance="outline">
-                <input
-                  matInput
-                  maxlength="200"
-                  placeholder="{{ 'createExam.example' | translate }}"
-                  [value]="exercise.description"
-                  (input)="
-                    this.handleDescriptionInput($event, section, $index)
-                  " />
-              </mat-form-field>
-              <div class="flex justify-between md:gap-5">
-                <mat-form-field class="w-24" appearance="outline">
+  <div class="flex py-10 gap-4">
+    <div class="flex flex-1 flex-col gap-8">
+      @for (section of this.sections; track $index) {
+        <section class="bg-slate-100 px-7 py-3 shadow-gray-500 shadow-md">
+          <h2 class="mb-3 text-2xl">
+            {{ 'createExam.' + section | translate }}
+          </h2>
+          <div class="flex flex-col">
+            @for (exercise of this.exercises[section]; track $index) {
+              <div class="py-0 px-0 flex flex-col md:flex-row md:gap-5">
+                <mat-form-field class="border-none w-full" appearance="outline">
                   <input
                     matInput
-                    type="number"
-                    min="1"
-                    max="10"
-                    (keydown)="this.updateQuantityWithKeyboard($event)"
-                    [value]="exercise.quantity"
-                    (input)="this.updateQuantity($event, section, $index)" />
+                    maxlength="200"
+                    placeholder="{{ 'createExam.example' | translate }}"
+                    [value]="exercise.description"
+                    (input)="
+                      this.handleDescriptionInput($event, section, $index)
+                    " />
                 </mat-form-field>
-                <button mat-fab (click)="deleteRow(section, $index)">
-                  <mat-icon>delete</mat-icon>
-                </button>
+                <div class="flex justify-between md:gap-5">
+                  <mat-form-field class="w-24" appearance="outline">
+                    <input
+                      matInput
+                      type="number"
+                      min="1"
+                      max="10"
+                      (keydown)="this.updateQuantityWithKeyboard($event)"
+                      [value]="exercise.quantity"
+                      (input)="this.updateQuantity($event, section, $index)" />
+                  </mat-form-field>
+                  <button mat-fab (click)="deleteRow(section, $index)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
               </div>
-            </div>
-          }
-        </div>
-        <button
-          mat-flat-button
-          class="w-fit"
-          color="accent"
-          (click)="this.addRow(section)">
-          {{ 'createExam.addRow' | translate }}
-        </button>
-      </section>
-    }
+            }
+          </div>
+          <button
+            mat-flat-button
+            class="w-fit"
+            color="accent"
+            (click)="this.addRow(section)">
+            {{ 'createExam.addRow' | translate }}
+          </button>
+        </section>
+      }
+    </div>
+    <aside class="rounded-md bg-white p-5 w-80 shadow-gray-500 shadow-md">
+      <div class="relative">
+        <mat-form-field class="w-full" appearance="outline">
+          <mat-select placeholder="Asignatura">
+            <mat-option value="option1">Option 1</mat-option>
+            <mat-option value="option2">Option 2</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-checkbox [checked]="false">Incluir gráficos</mat-checkbox>
+        <mat-checkbox [checked]="false">Incluir respuestas</mat-checkbox>
+      </div>
+    </aside>
   </div>
-
   <div id="exam-pdf" class="relative w-full px-5 flex justify-center">
     @if (this.pdfUrl !== undefined && !this.isCreatingPdf) {
       <a class="open-document" [href]="this.pdfUrl" target="_blank">{{
