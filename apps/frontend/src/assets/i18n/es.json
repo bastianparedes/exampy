@@ -31,6 +31,17 @@
     "initExamCreation": "Creando examen, eso puede demorar...",
     "examCreationFailed": "Ocurrió un error creando el examen. Inténtalo más tarde",
     "examCreationSucceded": "Examen creado con éxito!",
-    "openDocument": "Ver documento"
+    "openDocument": "Ver documento",
+    "languageAndCommunication": "Lenguaje y comunicación",
+    "mathematics": "Matemática",
+    "physics": "Física",
+    "chemistry": "Química",
+    "biology": "Biología",
+    "naturalSciences": "Ciencias naturales",
+    "geographyAndSocialSciences": "Geograbía y ciencias sociales",
+    "physicalEducation": "Educación físcia",
+    "visualArts": "Artes visuales",
+    "music": "Música",
+    "technology": "Tecnología"
   }
 }

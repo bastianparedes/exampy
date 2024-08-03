@@ -10,15 +10,31 @@ import {
   IsString,
   MaxLength,
   IsArray,
-  ArrayNotEmpty,
   ValidateNested,
   IsOptional,
   IsObject,
   IsNotEmptyObject,
+  IsBoolean,
+  IsIn,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { getShuffledArray } from '../utils/array';
 import { writeFileSync } from 'fs';
+
+const subjects = [
+  'languageAndCommunication',
+  'mathematics',
+  'physics',
+  'chemistry',
+  'biology',
+  'naturalSciences',
+  'geographyAndSocialSciences',
+  'physicalEducation',
+  'visualArts',
+  'music',
+  'technology',
+] as const;
+
 class ExerciseDescriptionValidator {
   @IsString()
   @MaxLength(200)
@@ -33,21 +49,18 @@ class ExerciseDescriptionValidator {
 class ExercisesValidator {
   @IsOptional()
   @IsArray()
-  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => ExerciseDescriptionValidator)
   uniqueSelection?: ExerciseDescriptionValidator[];
 
   @IsOptional()
   @IsArray()
-  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => ExerciseDescriptionValidator)
   development?: ExerciseDescriptionValidator[];
 
   @IsOptional()
   @IsArray()
-  @ArrayNotEmpty()
   @ValidateNested({ each: true })
   @Type(() => ExerciseDescriptionValidator)
   trueOrFalse?: ExerciseDescriptionValidator[];
@@ -59,6 +72,21 @@ class BodyValidator {
   @ValidateNested()
   @Type(() => ExercisesValidator)
   exercises: ExercisesValidator;
+
+  @IsBoolean()
+  includeAnswers: boolean;
+
+  @IsBoolean()
+  includeGraphs: boolean;
+
+  @IsString()
+  @IsIn(subjects)
+  subject: (typeof subjects)[number];
+
+  @IsInt()
+  @Min(0)
+  @Max(10)
+  whiteSheets: number;
 }
 
 @Controller('exam')
@@ -71,11 +99,6 @@ export class ExamController {
 
   @Inject(LatexService)
   latexService = new LatexService();
-
-  @Get()
-  async getHealth() {
-    return 'ok';
-  }
 
   @Post()
   async PostCreateExam(

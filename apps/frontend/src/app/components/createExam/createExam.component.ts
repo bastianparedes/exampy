@@ -17,11 +17,15 @@ import { SkeletonComponent } from '../common/skeleton/skeleton.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { ViewportScroller } from '@angular/common';
-
-interface Exercise {
-  description: string;
-  quantity: number;
-}
+import {
+  FormBuilder,
+  FormArray,
+  FormGroup,
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-create-exam',
@@ -40,7 +44,9 @@ interface Exercise {
     MatProgressSpinnerModule,
     SkeletonComponent,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
 })
 export class CreateExamComponent {
@@ -49,47 +55,90 @@ export class CreateExamComponent {
   matSnackBar = inject(MatSnackBar);
   translateService = inject(TranslateService);
   viewportScroller = inject(ViewportScroller);
+  formBuilder = inject(FormBuilder);
 
-  exercises: {
-    uniqueSelection: Exercise[];
-    development: Exercise[];
-    trueOrFalse: Exercise[];
-  } = {
-    uniqueSelection: [],
-    development: [],
-    trueOrFalse: [],
-  };
-  readonly sections = Object.keys(
-    this.exercises
-  ) as (keyof typeof this.exercises)[];
+  subjects = [
+    'languageAndCommunication',
+    'mathematics',
+    'physics',
+    'chemistry',
+    'biology',
+    'naturalSciences',
+    'geographyAndSocialSciences',
+    'physicalEducation',
+    'visualArts',
+    'music',
+    'technology',
+  ];
+
+  examDataForm = new FormGroup({
+    exercises: new FormGroup({
+      uniqueSelection: new FormArray<FormGroup<{
+        description: FormControl<string>;
+        quantity: FormControl<number>;
+      }>>([]),
+      development: new FormArray<FormGroup<{
+        description: FormControl<string>;
+        quantity: FormControl<number>;
+      }>>([]),
+      trueOrFalse: new FormArray<FormGroup<{
+        description: FormControl<string>;
+        quantity: FormControl<number>;
+      }>>([]),
+    }),
+    subject: new FormControl('', [ Validators.required, Validators.maxLength(100) ]),
+    whiteSheets: new FormControl(0, [ Validators.required, Validators.maxLength(100) ]),
+    includeGraphs: new FormControl(false, [ Validators.required, Validators.maxLength(100) ]),
+    includeAnswers: new FormControl(true, [ Validators.required, Validators.maxLength(100) ])
+  }) as FormGroup<{
+    exercises: FormGroup<{
+        uniqueSelection: FormArray<FormGroup<{
+            description: FormControl<string>;
+            quantity: FormControl<number>;
+        }>>;
+        development: FormArray<FormGroup<{
+            description: FormControl<string>;
+            quantity: FormControl<number>;
+        }>>;
+        trueOrFalse: FormArray<FormGroup<{
+          description: FormControl<string>;
+          quantity: FormControl<number>;
+        }>>;
+    }>;
+    subject: FormControl<string>;
+    whiteSheets: FormControl<number>;
+    includeGraphs: FormControl<boolean>;
+    includeAnswers: FormControl<boolean>;
+}>;
+
+  readonly sections = ['uniqueSelection', 'development', 'trueOrFalse'] as const;
 
   isCreatingPdf = false;
   pdfUrl: undefined | SafeResourceUrl = undefined;
 
   setExample() {
-    this.exercises = {
-      uniqueSelection: [
-        { description: 'Multiplicación de matrices', quantity: 3 },
-      ],
-      development: [
-        {
-          description: 'Se da una función cuadrática y se pide su gráfica',
-          quantity: 3,
-        },
-      ],
-      trueOrFalse: [
-        { description: 'Multiplicación de números negativos', quantity: 3 },
-      ],
-    };
+    this.examDataForm.setValue({
+      exercises: {
+        uniqueSelection: [{ description: 'Multiplicación de matrices', quantity: 3 }],
+        development: [{ description: 'Se da una función cuadrática y se pide su gráfica', quantity: 3 }],
+        trueOrFalse: [{ description: 'Multiplicación de números negativos', quantity: 3 }]
+      },
+      subject: 'mathematics',
+      whiteSheets: 1,
+      includeGraphs: true,
+      includeAnswers: true,
+    });
   }
 
   handleDescriptionInput(
     event: Event,
-    section: keyof typeof this.exercises,
+    section: (typeof this.sections)[number],
     index: number
   ) {
     const { value } = event.target as HTMLInputElement;
-    this.exercises[section][index].description = value;
+    const exercise = this.examDataForm.value.exercises?.[section]?.[index];
+    if (exercise === undefined) return;
+    exercise.description = value;
   }
 
   updateQuantityWithKeyboard(event: KeyboardEvent) {
@@ -99,55 +148,41 @@ export class CreateExamComponent {
 
   updateQuantity(
     event: Event,
-    section: keyof typeof this.exercises,
+    section: (typeof this.sections)[number],
     index: number
   ) {
-    const exercise = this.exercises[section][index];
+  
+    const exercise = this.examDataForm.value.exercises?.[section]?.[index];
+    if (exercise === undefined) return;
     exercise.quantity = Number((event.target as HTMLInputElement).value);
   }
 
-  addRow(section: keyof typeof this.exercises) {
-    this.exercises[section].push({
+  addRow(section: (typeof this.sections)[number]) {
+    this.examDataForm.value.exercises?.[section]?.push({
       description: '',
       quantity: 1,
-    });
+    })
   }
 
-  deleteRow(section: keyof typeof this.exercises, index: number) {
-    this.exercises[section].splice(index, 1);
+  deleteRow(section: (typeof this.sections)[number], index: number) {
+    this.examDataForm.value.exercises?.[section]?.splice(index, 1);
   }
 
   getExamCanBeCreated(): boolean {
-    const sections = Object.keys(
-      this.exercises
-    ) as (keyof typeof this.exercises)[];
-    const sumOfExercisesIsGreaterThanZero =
-      sections.reduce(
-        (totalSum, section) =>
-          totalSum +
-          this.exercises[section].reduce(
-            (sum, exercise) => sum + exercise.quantity,
-            0
-          ),
-        0
-      ) > 0;
-    const everyDescriptionIsNotEmpty = sections.reduce(
-      (totalSum, section) =>
-        totalSum &&
-        this.exercises[section].reduce(
-          (sum, exercise) => sum && exercise.description.length > 0,
-          true
-        ),
-      true
-    );
+    const thereIsAtLeastExercise = this.sections.some((section) => Number(this.examDataForm.value.exercises?.[section]?.length) > 0);
+    const everyDescriptionIsNotEmpty = this.sections.every((section) => this.examDataForm.value.exercises?.[section]?.every((exercise) => Number(exercise?.description?.length) > 0));
+    const subjectIsSelected = this.examDataForm.value.subject !== '';
     return (
-      sumOfExercisesIsGreaterThanZero &&
+      thereIsAtLeastExercise &&
       everyDescriptionIsNotEmpty &&
+      subjectIsSelected &&
       !this.isCreatingPdf
     );
   }
 
-  async createTest() {
+  async createTest(event: Event) {
+    event.preventDefault();
+
     this.matSnackBar.open(
       await firstValueFrom(
         this.translateService.get('createExam.initExamCreation')
@@ -157,18 +192,11 @@ export class CreateExamComponent {
     );
 
     this.isCreatingPdf = true;
-    const exercises: Partial<typeof this.exercises> = {};
-    (Object.keys(this.exercises) as (keyof typeof this.exercises)[]).forEach(
-      section => {
-        if (this.exercises[section].length > 0)
-          exercises[section] = this.exercises[section];
-      }
-    );
     try {
       const pdfName = await firstValueFrom(
         this.httpClient.post(
           '/api/exam',
-          { exercises },
+          this.examDataForm.value,
           { responseType: 'text' }
         )
       );
