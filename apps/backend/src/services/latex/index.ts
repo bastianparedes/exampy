@@ -6,10 +6,7 @@ import { join } from 'path';
 
 @Injectable()
 export class LatexService {
-  readonly packages = readFileSync(
-    join('src', 'services', 'latex', 'dependencies.tex'),
-    'utf-8',
-  );
+  readonly packages = readFileSync(join('src', 'services', 'latex', 'dependencies.tex'), 'utf-8');
 
   studentDataTable = `
 \\begin{longtable}{|p{0.475\\linewidth}|p{0.475\\linewidth}|}%
@@ -23,28 +20,15 @@ export class LatexService {
 \\end{longtable}%
   `.trim();
 
-  getLatexSectionUniqueSelection(
-    exercises: NonNullable<ExercisesLatex['uniqueSelection']>,
-  ) {
-    const questionsLatex = [
-      '\\hfill \\break',
-      '\\textbf{Item selección múltiple:} Encierra la alternativa correcta de cada ejercicio.%',
-      '\\begin{longtable}{|p{0.975\\linewidth}|}%',
-      '\\hline%',
-    ];
+  getLatexSectionUniqueSelection(exercises: NonNullable<ExercisesLatex['uniqueSelection']>) {
+    const questionsLatex = ['\\hfill \\break', '\\textbf{Item selección múltiple:} Encierra la alternativa correcta de cada ejercicio.%', '\\begin{longtable}{|p{0.975\\linewidth}|}%', '\\hline%'];
 
-    const correctAnswersLatex = [
-      '\\hfill \\break',
-      '\\textbf{Item selección múltiple:}%',
-      '\\begin{enumerate}[label=\\arabic*)]%',
-    ];
+    const correctAnswersLatex = ['\\hfill \\break', '\\textbf{Item selección múltiple:}%', '\\begin{enumerate}[label=\\arabic*)]%'];
 
     exercises.forEach((exercise, indexExercise) => {
       questionsLatex.push('\\begin{minipage}[t]{\\linewidth}%');
       questionsLatex.push('\\vspace{5pt}%');
-      questionsLatex.push(
-        `\\begin{enumerate}[label=\\arabic*),start=${indexExercise + 1}]%`,
-      );
+      questionsLatex.push(`\\begin{enumerate}[label=\\arabic*),start=${indexExercise + 1}]%`);
       questionsLatex.push('\\item%');
       questionsLatex.push(exercise.question + '%');
       questionsLatex.push('\\end{enumerate}%');
@@ -73,23 +57,14 @@ export class LatexService {
     correctAnswersLatex.push('\\end{enumerate}%');
     return {
       questions: questionsLatex.join('\n'),
-      answers: correctAnswersLatex.join('\n'),
+      answers: correctAnswersLatex.join('\n')
     };
   }
 
-  getLatexSectionDevelopment(
-    exercises: NonNullable<ExercisesLatex['development']>,
-  ) {
-    const questionsLatex = [
-      '\\hfill \\break%',
-      '\\textbf{Item desarrollo:} Desarrolla lo solicitado en cada ejercicio.%',
-    ];
+  getLatexSectionDevelopment(exercises: NonNullable<ExercisesLatex['development']>) {
+    const questionsLatex = ['\\hfill \\break%', '\\textbf{Item desarrollo:} Desarrolla lo solicitado en cada ejercicio.%'];
 
-    const correctAnswersLatex = [
-      '\\hfill \\break',
-      '\\textbf{Item desarrollo:}%',
-      '\\begin{enumerate}[label=\\arabic*)]%',
-    ];
+    const correctAnswersLatex = ['\\hfill \\break', '\\textbf{Item desarrollo:}%', '\\begin{enumerate}[label=\\arabic*)]%'];
 
     questionsLatex.push(`\\begin{enumerate}[label=\\arabic*),start=1]%`);
     exercises.forEach((exercise) => {
@@ -109,22 +84,13 @@ export class LatexService {
     correctAnswersLatex.push('\\end{enumerate}%');
     return {
       questions: questionsLatex.join('\n'),
-      answers: correctAnswersLatex.join('\n'),
+      answers: correctAnswersLatex.join('\n')
     };
   }
 
-  getLatexSectionTrueOrFalse(
-    exercises: NonNullable<ExercisesLatex['trueOrFalse']>,
-  ) {
-    const questionsLatex = [
-      '\\hfill \\break',
-      '\\textbf{Item verdadero o falso:} Escribe una "V" o "F" según el enunciado sea verdadero o falso.%',
-    ];
-    const correctAnswersLatex = [
-      '\\hfill \\break',
-      '\\textbf{Item desarrollo:}%',
-      '\\begin{enumerate}[label=\\arabic*)]%',
-    ];
+  getLatexSectionTrueOrFalse(exercises: NonNullable<ExercisesLatex['trueOrFalse']>) {
+    const questionsLatex = ['\\hfill \\break', '\\textbf{Item verdadero o falso:} Escribe una "V" o "F" según el enunciado sea verdadero o falso.%'];
+    const correctAnswersLatex = ['\\hfill \\break', '\\textbf{Item desarrollo:}%', '\\begin{enumerate}[label=\\arabic*)]%'];
 
     questionsLatex.push(`\\begin{enumerate}[label=\\arabic*),start=1]%`);
     exercises.forEach((exercise) => {
@@ -140,34 +106,24 @@ export class LatexService {
     correctAnswersLatex.push('\\end{enumerate}%');
     return {
       questions: questionsLatex.join('\n'),
-      answers: correctAnswersLatex.join('\n'),
+      answers: correctAnswersLatex.join('\n')
     };
   }
 
   getCompleteLatexCode(body: string) {
-    return [
-      this.packages,
-      '\\begin{document}%',
-      this.studentDataTable,
-      body,
-      '\\end{document}%',
-    ].join('\n');
+    return [this.packages, '\\begin{document}%', this.studentDataTable, body, '\\end{document}%'].join('\n');
   }
 
   async getPdfUrl(latexCode: string) {
     const formData = new FormData();
 
-    formData.append(
-      'filecontents[]',
-      new Blob([latexCode], { type: 'text/plain' }),
-      'document.tex',
-    );
+    formData.append('filecontents[]', new Blob([latexCode], { type: 'text/plain' }), 'document.tex');
     formData.append('filename[]', 'document.tex');
     formData.append('engine', 'pdflatex');
     formData.append('return', 'pdf');
     const response = await fetch('https://texlive.net/cgi-bin/latexcgi', {
       method: 'POST',
-      body: formData,
+      body: formData
     });
 
     return response.url;

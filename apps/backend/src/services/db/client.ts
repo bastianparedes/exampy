@@ -13,7 +13,7 @@ const DATABASE_SSL_MODE = process.env['DATABASE_SSL_MODE'] ?? '';
 const URI = `${DATABASE_PROTOCOL}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?sslmode=${DATABASE_SSL_MODE}`;
 
 const client = new Client({
-  connectionString: URI,
+  connectionString: URI
 });
 
 client.connect();

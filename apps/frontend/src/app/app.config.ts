@@ -22,11 +22,11 @@ export const appConfig: ApplicationConfig = {
         loader: {
           provide: TranslateLoader,
           useFactory: translateLoaderFactory,
-          deps: [HttpClient],
-        },
+          deps: [HttpClient]
+        }
       })
     ),
     provideClientHydration(),
-    provideHttpClient(withFetch()),
-  ],
+    provideHttpClient(withFetch())
+  ]
 };

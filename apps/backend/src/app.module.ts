@@ -8,6 +8,6 @@ import { DbService } from './services/db';
 @Module({
   imports: [],
   controllers: [HealthController, ExamController],
-  providers: [AiService, LatexService, DbService],
+  providers: [AiService, LatexService, DbService]
 })
 export class AppModule {}

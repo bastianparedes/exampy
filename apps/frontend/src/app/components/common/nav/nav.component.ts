@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
   standalone: true,
   imports: [MatProgressSpinnerModule, TranslateModule, MatIconModule],
   templateUrl: './nav.component.html',
-  styleUrl: './nav.component.scss',
+  styleUrl: './nav.component.scss'
 })
 export class NavComponent {
   isOpen = false;

@@ -3,10 +3,7 @@ import { LatexService } from '../latex';
 import { generateText } from 'ai';
 import { google } from '@ai-sdk/google';
 import { load } from 'js-yaml';
-import type {
-  ExercisesDescription,
-  ExercisesLatex,
-} from '../../types/exercise';
+import type { ExercisesDescription, ExercisesLatex } from '../../types/exercise';
 import { writeFileSync } from 'fs';
 
 const yamlExampleUniqueSelection = `
@@ -71,16 +68,14 @@ export class AiService {
   private readonly latexService = new LatexService();
 
   getSectionsToUse(exercises: ExercisesDescription) {
-    return Object.keys(exercises).filter(
-      (section: keyof ExercisesDescription) => exercises[section].length > 0,
-    ) as (keyof ExercisesDescription)[];
+    return Object.keys(exercises).filter((section: keyof ExercisesDescription) => exercises[section].length > 0) as (keyof ExercisesDescription)[];
   }
 
   getExample(section: keyof ExercisesDescription) {
     return {
       uniqueSelection: yamlExampleUniqueSelection,
       development: yamlExampleDevelopment,
-      trueOrFalse: yamlExampleTrueOrFalse,
+      trueOrFalse: yamlExampleTrueOrFalse
     }[section];
   }
 
@@ -88,44 +83,30 @@ export class AiService {
     return {
       uniqueSelection:
         'El valor de "uniqueSelection" es una lista de mapas donde cada mapa tiene la clave "question" y la clave "answers". "question" tiene código LaTeX y "answers" es una lista de códigos LaTeX. Las respuestas correctas en "answers" siempre debe estar en el index 0. Yo las desordenaré después.',
-      development:
-        'El valor de "development" es una lista de mapas donde cada mapa tiene la clave "question" y la clave "answer". "question" tiene código LaTeX y "answer" es código LaTeX',
+      development: 'El valor de "development" es una lista de mapas donde cada mapa tiene la clave "question" y la clave "answer". "question" tiene código LaTeX y "answer" es código LaTeX',
       trueOrFalse:
-        'El valor de "trueOrFalse" es una lista de mapas donde cada mapa tiene la clave "question" y la clave "answer". "question" tiene código LaTeX con una afirmación que puede ser verdadera o falsa y "answer" un booleano que indica si la afirmación es verdadera o falsa',
+        'El valor de "trueOrFalse" es una lista de mapas donde cada mapa tiene la clave "question" y la clave "answer". "question" tiene código LaTeX con una afirmación que puede ser verdadera o falsa y "answer" un booleano que indica si la afirmación es verdadera o falsa'
     }[section];
   }
 
-  getDescriptionAndQuantity(
-    exercises: ExercisesDescription,
-    section: keyof ExercisesDescription,
-  ) {
-    return [
-      `A continuación te describo las preguntas de ${section}:`,
-      ...exercises[section].map(
-        (exercise) =>
-          `${exercise.quantity} pregunta(s): ${exercise.description}`,
-      ),
-    ].join('\n');
+  getDescriptionAndQuantity(exercises: ExercisesDescription, section: keyof ExercisesDescription) {
+    return [`A continuación te describo las preguntas de ${section}:`, ...exercises[section].map((exercise) => `${exercise.quantity} pregunta(s): ${exercise.description}`)].join('\n');
   }
 
-  async getExercisesLatexCodes(exercises: ExercisesDescription) {
+  async getExercisesLatexCodes(exercises: ExercisesDescription, subject: string) {
     const completePrompt = [
-      'Soy profesor y estoy creando un examen.',
+      `Soy profesor de "${subject}" y estoy creando un examen.`,
       `Debes darme un YAML que contenga un mapa con las claves ${this.getSectionsToUse(exercises).join(', ')}`,
-      ...this.getSectionsToUse(exercises).map((section) =>
-        this.getYamlDescription(section),
-      ),
+      ...this.getSectionsToUse(exercises).map((section) => this.getYamlDescription(section)),
       'A continuación te muestro un ejemplo de YAML que me puedes responder.',
-      ...this.getSectionsToUse(exercises).map((section) =>
-        this.getExample(section),
-      ),
+      ...this.getSectionsToUse(exercises).map((section) => this.getExample(section)),
       '',
       'Puedes usar estar librerías de LaTeX:',
       this.latexService.packages,
       '',
       this.getSectionsToUse(exercises)
         .map((section) => this.getDescriptionAndQuantity(exercises, section))
-        .join('\n\n'),
+        .join('\n\n')
     ].join('\n');
 
     const response = await generateText({
@@ -133,7 +114,7 @@ export class AiService {
       prompt: completePrompt,
       maxTokens: Math.trunc(20000),
       temperature: 0,
-      maxRetries: 3,
+      maxRetries: 3
     });
     const match = response.text.match(/```yaml([\s\S]*?)```/);
     const text = match?.[1] ?? response.text;

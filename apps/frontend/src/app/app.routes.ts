@@ -4,5 +4,5 @@ import { CreateExamComponent } from './components/createExam/createExam.componen
 
 export const routes: Routes = [
   { path: 'create_exam', component: CreateExamComponent },
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent }
 ];

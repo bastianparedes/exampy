@@ -3,20 +3,7 @@ import { AiService } from '../services/ai';
 import { DbService } from '../services/db';
 import { LatexService } from '../services/latex';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import {
-  IsInt,
-  Max,
-  Min,
-  IsString,
-  MaxLength,
-  IsArray,
-  ValidateNested,
-  IsOptional,
-  IsObject,
-  IsNotEmptyObject,
-  IsBoolean,
-  IsIn,
-} from 'class-validator';
+import { IsInt, Max, Min, IsString, MaxLength, IsArray, ValidateNested, IsOptional, IsObject, IsNotEmptyObject, IsBoolean, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 import { getShuffledArray } from '../utils/array';
 import { writeFileSync } from 'fs';
@@ -64,19 +51,7 @@ class BodyValidator {
   includeAnswers: boolean;
 
   @IsString()
-  @IsIn([
-    'languageAndCommunication',
-    'mathematics',
-    'physics',
-    'chemistry',
-    'biology',
-    'naturalSciences',
-    'geographyAndSocialSciences',
-    'physicalEducation',
-    'visualArts',
-    'music',
-    'technology',
-  ])
+  @IsIn(['languageAndCommunication', 'mathematics', 'physics', 'chemistry', 'biology', 'naturalSciences', 'geographyAndSocialSciences', 'physicalEducation', 'visualArts', 'music', 'technology'])
   subject: Subject;
 
   @IsInt()
@@ -97,60 +72,39 @@ export class ExamController {
   latexService = new LatexService();
 
   @Post()
-  async PostCreateExam(
-    @Body() body: BodyValidator,
-    @Req() req: FastifyRequest,
-    @Res() res: FastifyReply,
-  ) {
-    const exercisesLatexCodes = await this.aiService.getExercisesLatexCodes(
-      body.exercises,
-    );
+  async PostCreateExam(@Body() body: BodyValidator, @Req() req: FastifyRequest, @Res() res: FastifyReply) {
+    const exercisesLatexCodes = await this.aiService.getExercisesLatexCodes(body.exercises, body.subject);
 
     const latexLinesQuestions: string[] = [];
-    const latexLinesAnswers: string[] = [
-      '\\newpage\\begin{center}\\LARGE Respuestas\\end{center}',
-    ];
+    const latexLinesAnswers: string[] = ['\\newpage\\begin{center}\\LARGE Respuestas\\end{center}'];
 
     if (exercisesLatexCodes.uniqueSelection !== undefined) {
-      const result = this.latexService.getLatexSectionUniqueSelection(
-        getShuffledArray(exercisesLatexCodes.uniqueSelection),
-      );
+      const result = this.latexService.getLatexSectionUniqueSelection(getShuffledArray(exercisesLatexCodes.uniqueSelection));
       latexLinesQuestions.push(result.questions);
       latexLinesAnswers.push(result.answers);
     }
 
     if (exercisesLatexCodes.development !== undefined) {
-      const result = this.latexService.getLatexSectionDevelopment(
-        getShuffledArray(exercisesLatexCodes.development),
-      );
+      const result = this.latexService.getLatexSectionDevelopment(getShuffledArray(exercisesLatexCodes.development));
       latexLinesQuestions.push(result.questions);
       latexLinesAnswers.push(result.answers);
     }
 
     if (exercisesLatexCodes.trueOrFalse !== undefined) {
-      const result = this.latexService.getLatexSectionTrueOrFalse(
-        getShuffledArray(exercisesLatexCodes.trueOrFalse),
-      );
+      const result = this.latexService.getLatexSectionTrueOrFalse(getShuffledArray(exercisesLatexCodes.trueOrFalse));
       latexLinesQuestions.push(result.questions);
       latexLinesAnswers.push(result.answers);
     }
 
     let completeLatexCodeLines = [...latexLinesQuestions];
-    for (let i = 0; i < body.whiteSheets; i++)
-      completeLatexCodeLines.push('\\newpage \\hfill \\break');
+    for (let i = 0; i < body.whiteSheets; i++) completeLatexCodeLines.push('\\newpage \\hfill \\break');
 
-    if (body.includeAnswers)
-      completeLatexCodeLines = completeLatexCodeLines.concat(latexLinesAnswers);
-    const completeLatexCode = this.latexService.getCompleteLatexCode(
-      completeLatexCodeLines.join('\n'),
-    );
+    if (body.includeAnswers) completeLatexCodeLines = completeLatexCodeLines.concat(latexLinesAnswers);
+    const completeLatexCode = this.latexService.getCompleteLatexCode(completeLatexCodeLines.join('\n'));
 
-    if (process.env.NODE_ENV === 'development')
-      writeFileSync('latex.tex', completeLatexCode, 'utf-8');
+    if (process.env.NODE_ENV === 'development') writeFileSync('latex.tex', completeLatexCode, 'utf-8');
 
-    const pdfUrl = new URL(
-      await this.latexService.getPdfUrl(completeLatexCode),
-    );
+    const pdfUrl = new URL(await this.latexService.getPdfUrl(completeLatexCode));
     if (!pdfUrl.href.endsWith('.pdf')) return res.status(500).send(pdfUrl.href);
 
     const pathSections = pdfUrl.pathname.split('/');
@@ -158,7 +112,7 @@ export class ExamController {
 
     res.send(lastPathSection);
     await this.dbService.db.insert(this.dbService.schema.Exams).values({
-      name: lastPathSection,
+      name: lastPathSection
     });
   }
 }

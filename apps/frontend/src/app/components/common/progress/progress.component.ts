@@ -5,7 +5,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
   selector: 'app-progress',
   standalone: true,
   imports: [MatProgressBarModule],
-  templateUrl: './progress.component.html',
+  templateUrl: './progress.component.html'
 })
 export class ProgressComponent implements OnChanges {
   @Input({ required: true }) percentage!: number;

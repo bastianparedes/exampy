@@ -11,7 +11,7 @@ const everyElementIsDifferent = <T>(array: T[]) => {
 };
 
 const arrayIncludesElement = <T, U>(array: T[], element: U) => {
-  return array.some(item => {
+  return array.some((item) => {
     return JSON.stringify(item) === JSON.stringify(element);
   });
 };
@@ -41,7 +41,7 @@ function reorderArrayByIndexes<T>(array: T[], indexes: number[]): T[] {
   if (array.length !== indexes.length) {
     throw new Error('Arrays must have same length');
   }
-  return indexes.map(index => array[index]);
+  return indexes.map((index) => array[index]);
 }
 
 function createArrayUpToNumber(number: number): number[] {

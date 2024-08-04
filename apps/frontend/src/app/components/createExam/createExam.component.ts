@@ -38,8 +38,8 @@ import { FormBuilder, FormArray, FormGroup, FormControl, FormsModule, ReactiveFo
     MatSelectModule,
     MatCheckboxModule,
     FormsModule,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+  ]
 })
 export class CreateExamComponent {
   sanitizer = inject(DomSanitizer);
@@ -55,11 +55,11 @@ export class CreateExamComponent {
     exercises: this.formBuilder.group({
       uniqueSelection: new FormArray([] as FormGroup<{ description: FormControl<string | null>; quantity: FormControl<number | null> }>[]),
       development: new FormArray([] as FormGroup<{ description: FormControl<string | null>; quantity: FormControl<number | null> }>[]),
-      trueOrFalse: new FormArray([] as FormGroup<{ description: FormControl<string | null>; quantity: FormControl<number | null> }>[]),
+      trueOrFalse: new FormArray([] as FormGroup<{ description: FormControl<string | null>; quantity: FormControl<number | null> }>[])
     }),
     subject: new FormControl('', [Validators.required, Validators.minLength(1)]),
     whiteSheets: new FormControl(0, [Validators.required, Validators.max(10)]),
-    includeAnswers: new FormControl(true, [Validators.required]),
+    includeAnswers: new FormControl(true, [Validators.required])
   });
 
   readonly sections = ['uniqueSelection', 'development', 'trueOrFalse'] as const;
@@ -76,29 +76,29 @@ export class CreateExamComponent {
         uniqueSelection: new FormArray([
           new FormGroup({
             description: new FormControl('Multiplicación de matrices', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
-            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)]),
+            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
           }),
           new FormGroup({
             description: new FormControl('Suma de fracciones', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
-            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)]),
-          }),
+            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
+          })
         ]),
         development: new FormArray([
           new FormGroup({
             description: new FormControl('Se da una función cuadrática y se pide su gráfica', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
-            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)]),
-          }),
+            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
+          })
         ]),
         trueOrFalse: new FormArray([
           new FormGroup({
             description: new FormControl('Multiplicación de números negativos', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
-            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)]),
-          }),
-        ]),
+            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
+          })
+        ])
       }),
       subject: new FormControl('mathematics', [Validators.required, Validators.maxLength(200)]),
       whiteSheets: new FormControl(0, [Validators.required, Validators.max(10)]),
-      includeAnswers: new FormControl(true, [Validators.required]),
+      includeAnswers: new FormControl(true, [Validators.required])
     });
   }
 
@@ -107,7 +107,7 @@ export class CreateExamComponent {
     exerciseSection.push(
       new FormGroup({
         description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
-        quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)]),
+        quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
       })
     );
   }
@@ -118,7 +118,7 @@ export class CreateExamComponent {
   }
 
   getExamCanBeCreated(): boolean {
-    const thereIsAtLeastExercise = this.sections.some(section => Number(this.examDataForm.value.exercises?.[section]?.length) > 0);
+    const thereIsAtLeastExercise = this.sections.some((section) => Number(this.examDataForm.value.exercises?.[section]?.length) > 0);
     return thereIsAtLeastExercise && this.examDataForm.valid && !this.isCreatingPdf;
   }
 
@@ -131,11 +131,11 @@ export class CreateExamComponent {
     try {
       const pdfName = await firstValueFrom(
         this.httpClient.post('/api/exam', this.examDataForm.value, {
-          responseType: 'text',
+          responseType: 'text'
         })
       );
       this.matSnackBar.open(await firstValueFrom(this.translateService.get('createExam.examCreationSucceded')), await firstValueFrom(this.translateService.get('createExam.close')), {
-        horizontalPosition: 'right',
+        horizontalPosition: 'right'
       });
 
       this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`/api/pdf/${pdfName}`);
@@ -144,7 +144,7 @@ export class CreateExamComponent {
       console.error(error);
       this.pdfUrl = undefined;
       this.matSnackBar.open(await firstValueFrom(this.translateService.get('createExam.examCreationFailed')), await firstValueFrom(this.translateService.get('createExam.close')), {
-        horizontalPosition: 'right',
+        horizontalPosition: 'right'
       });
     }
     this.isCreatingPdf = false;
