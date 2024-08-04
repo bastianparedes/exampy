@@ -18,7 +18,7 @@ input {
   text-wrap: nowrap;
 
   &::after {
-    content: '';
+    content: "";
     z-index: -1;
     position: absolute;
     width: 100%;
@@ -30,8 +30,18 @@ input {
   }
 
   &::before {
-    content: '';
-    background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #ff00c8, #ff0000);
+    content: "";
+    background: linear-gradient(
+      45deg,
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #ff00c8,
+      #ff0000
+    );
     position: absolute;
     top: -1.5rem;
     left: -1.5rem;

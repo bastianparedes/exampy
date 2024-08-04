@@ -53,9 +53,24 @@ export class CreateExamComponent {
 
   examDataForm = new FormGroup({
     exercises: this.formBuilder.group({
-      uniqueSelection: new FormArray([] as FormGroup<{ description: FormControl<string | null>; quantity: FormControl<number | null> }>[]),
-      development: new FormArray([] as FormGroup<{ description: FormControl<string | null>; quantity: FormControl<number | null> }>[]),
-      trueOrFalse: new FormArray([] as FormGroup<{ description: FormControl<string | null>; quantity: FormControl<number | null> }>[])
+      uniqueSelection: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      ),
+      development: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      ),
+      trueOrFalse: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      )
     }),
     subject: new FormControl('', [Validators.required, Validators.minLength(1)]),
     whiteSheets: new FormControl(0, [Validators.required, Validators.max(10)]),

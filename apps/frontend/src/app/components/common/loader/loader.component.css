@@ -31,7 +31,7 @@ body {
 .page-loaders-animation .line_l,
 .page-loaders-animation .line_2,
 .page-loaders-animation .line_3 {
-  content: '';
+  content: "";
   position: absolute;
   border-radius: 50%;
 }
