@@ -138,8 +138,12 @@ export class ExamController {
       latexLinesAnswers.push(result.answers);
     }
 
-    const completeLatexCodeLines = [...latexLinesQuestions];
-    if (body.includeAnswers) completeLatexCodeLines.concat(latexLinesAnswers);
+    let completeLatexCodeLines = [...latexLinesQuestions];
+    for (let i = 0; i < body.whiteSheets; i++)
+      completeLatexCodeLines.push('\\newpage \\hfill \\break');
+
+    if (body.includeAnswers)
+      completeLatexCodeLines = completeLatexCodeLines.concat(latexLinesAnswers);
     const completeLatexCode = this.latexService.getCompleteLatexCode(
       completeLatexCodeLines.join('\n'),
     );

@@ -2,8 +2,8 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import {MatSelectModule} from '@angular/material/select';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LoaderComponent } from '../../components/common/loader/loader.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -46,7 +46,7 @@ import {
     MatSelectModule,
     MatCheckboxModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
 })
 export class CreateExamComponent {
@@ -71,86 +71,147 @@ export class CreateExamComponent {
     'technology',
   ];
 
-  examDataForm = this.formBuilder.group({
+  examDataForm = new FormGroup({
     exercises: this.formBuilder.group({
-      uniqueSelection: this.formBuilder.array([{ description: 'string', quantity: 1 }]),
-      development: this.formBuilder.array([] as { description: string; quantity: number; }[]),
-      trueOrFalse: this.formBuilder.array([] as { description: string; quantity: number; }[]),
+      uniqueSelection: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      ),
+      development: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      ),
+      trueOrFalse: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      ),
     }),
-    subject: this.formBuilder.control('', [ Validators.required, Validators.maxLength(200) ]),
-    whiteSheets: this.formBuilder.control(0, [ Validators.required, Validators.maxLength(100) ]),
-    includeGraphs: this.formBuilder.control(false, [ Validators.required, Validators.maxLength(100) ]),
-    includeAnswers: this.formBuilder.control(true, [ Validators.required, Validators.maxLength(100) ])
+    subject: new FormControl('', [
+      Validators.required,
+      Validators.minLength(1),
+    ]),
+    whiteSheets: new FormControl(0, [Validators.required, Validators.max(10)]),
+    includeGraphs: new FormControl(false, [Validators.required]),
+    includeAnswers: new FormControl(true, [Validators.required]),
   });
 
-  readonly sections = ['uniqueSelection', 'development', 'trueOrFalse'] as const;
+  readonly sections = [
+    'uniqueSelection',
+    'development',
+    'trueOrFalse',
+  ] as const;
+  getSectionArray(section: (typeof this.sections)[number]) {
+    return this.examDataForm.get('exercises.' + section) as FormArray;
+  }
 
   isCreatingPdf = false;
   pdfUrl: undefined | SafeResourceUrl = undefined;
 
   setExample() {
-    console.log(this.examDataForm.get('exercises.uniqueSelection')?.value);
-    this.examDataForm.setValue({
-      exercises: {
-        uniqueSelection: [{ description: 'Multiplicación de matrices', quantity: 3 }],
-        development: [{ description: 'Se da una función cuadrática y se pide su gráfica', quantity: 3 }],
-        trueOrFalse: [{ description: 'Multiplicación de números negativos', quantity: 3 }]
-      },
-      subject: 'mathematics',
-      whiteSheets: 1,
-      includeGraphs: true,
-      includeAnswers: true,
+    this.examDataForm = new FormGroup({
+      exercises: this.formBuilder.group({
+        uniqueSelection: new FormArray([
+          new FormGroup({
+            description: new FormControl('Multiplicación de matrices', [
+              Validators.required,
+              Validators.minLength(1),
+              Validators.maxLength(200),
+            ]),
+            quantity: new FormControl(1, [
+              Validators.required,
+              Validators.min(1),
+              Validators.max(10),
+            ]),
+          }),
+        ]),
+        development: new FormArray([
+          new FormGroup({
+            description: new FormControl(
+              'Se da una función cuadrática y se pide su gráfica',
+              [
+                Validators.required,
+                Validators.minLength(1),
+                Validators.maxLength(200),
+              ]
+            ),
+            quantity: new FormControl(1, [
+              Validators.required,
+              Validators.min(1),
+              Validators.max(10),
+            ]),
+          }),
+        ]),
+        trueOrFalse: new FormArray([
+          new FormGroup({
+            description: new FormControl(
+              'Multiplicación de números negativos',
+              [
+                Validators.required,
+                Validators.minLength(1),
+                Validators.maxLength(200),
+              ]
+            ),
+            quantity: new FormControl(1, [
+              Validators.required,
+              Validators.min(1),
+              Validators.max(10),
+            ]),
+          }),
+        ]),
+      }),
+      subject: new FormControl('mathematics', [
+        Validators.required,
+        Validators.maxLength(200),
+      ]),
+      whiteSheets: new FormControl(0, [
+        Validators.required,
+        Validators.max(10),
+      ]),
+      includeGraphs: new FormControl(false, [Validators.required]),
+      includeAnswers: new FormControl(true, [Validators.required]),
     });
-    console.log(this.examDataForm.value);
-  }
-
-  handleDescriptionInput(
-    event: Event,
-    section: (typeof this.sections)[number],
-    index: number
-  ) {
-    const { value } = event.target as HTMLInputElement;
-    const exercise = this.examDataForm.value.exercises?.[section]?.[index];
-    if (exercise === undefined || exercise === null ) return;
-    exercise.description = value;
-  }
-
-  updateQuantityWithKeyboard(event: KeyboardEvent) {
-    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown')
-      event.preventDefault();
-  }
-
-  updateQuantity(
-    event: Event,
-    section: (typeof this.sections)[number],
-    index: number
-  ) {
-  
-    const exercise = this.examDataForm.value.exercises?.[section]?.[index];
-    if (exercise === undefined || exercise === null ) return;
-    exercise.quantity = Number((event.target as HTMLInputElement).value);
   }
 
   addRow(section: (typeof this.sections)[number]) {
-    this.examDataForm.value.exercises?.[section]?.push({
-      description: '',
-      quantity: 1,
-    })
+    const exerciseSection = this.examDataForm.get(
+      'exercises.' + section
+    ) as FormArray;
+    exerciseSection.push(
+      new FormGroup({
+        description: new FormControl('', [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(200),
+        ]),
+        quantity: new FormControl(1, [
+          Validators.required,
+          Validators.min(1),
+          Validators.max(10),
+        ]),
+      })
+    );
   }
 
   deleteRow(section: (typeof this.sections)[number], index: number) {
-    this.examDataForm.value.exercises?.[section]?.splice(index, 1);
+    const exerciseSection = this.examDataForm.get(
+      'exercises.' + section
+    ) as FormArray;
+    exerciseSection.removeAt(index);
   }
 
   getExamCanBeCreated(): boolean {
-    const thereIsAtLeastExercise = this.sections.some((section) => Number(this.examDataForm.value.exercises?.[section]?.length) > 0);
-    const everyDescriptionIsNotEmpty = this.sections.every((section) => this.examDataForm.value.exercises?.[section]?.every((exercise) => Number(exercise?.description?.length) > 0));
-    const subjectIsSelected = this.examDataForm.value?.subject !== '';
+    const thereIsAtLeastExercise = this.sections.some(
+      section =>
+        Number(this.examDataForm.value.exercises?.[section]?.length) > 0
+    );
     return (
-      thereIsAtLeastExercise &&
-      everyDescriptionIsNotEmpty &&
-      subjectIsSelected &&
-      !this.isCreatingPdf
+      thereIsAtLeastExercise && this.examDataForm.valid && !this.isCreatingPdf
     );
   }
 
@@ -168,11 +229,9 @@ export class CreateExamComponent {
     this.isCreatingPdf = true;
     try {
       const pdfName = await firstValueFrom(
-        this.httpClient.post(
-          '/api/exam',
-          this.examDataForm.value,
-          { responseType: 'text' }
-        )
+        this.httpClient.post('/api/exam', this.examDataForm.value, {
+          responseType: 'text',
+        })
       );
       this.matSnackBar.open(
         await firstValueFrom(
