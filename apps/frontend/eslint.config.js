@@ -1,45 +1,76 @@
 // @ts-check
-const eslint = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const angular = require('angular-eslint');
+const eslint = require("@eslint/js");
+const tseslint = require("typescript-eslint");
+const angular = require("angular-eslint");
+const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
 
 module.exports = tseslint.config(
   {
-    files: ['**/*.ts'],
+    files: ["**/*.ts"],
     extends: [
       eslint.configs.recommended,
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
+      eslintPluginPrettierRecommended,
     ],
     processor: angular.processInlineTemplates,
     rules: {
-      '@angular-eslint/directive-selector': [
-        'error',
+      "@angular-eslint/directive-selector": [
+        "error",
         {
-          type: 'attribute',
-          prefix: 'app',
-          style: 'camelCase',
+          type: "attribute",
+          prefix: "app",
+          style: "camelCase",
         },
       ],
-      '@angular-eslint/component-selector': [
-        'error',
+      "@angular-eslint/component-selector": [
+        "error",
         {
-          type: 'element',
-          prefix: 'app',
-          style: 'kebab-case',
+          type: "element",
+          prefix: "app",
+          style: "kebab-case",
+        },
+      ],
+      "prettier/prettier": [
+        "error",
+        {
+          tabWidth: 2,
+          useTabs: false,
+          singleQuote: true,
+          semi: true,
+          bracketSpacing: true,
+          arrowParens: "always",
+          trailingComma: "none",
+          bracketSameLine: true,
+          printWidth: 200,
         },
       ],
     },
   },
   {
-    files: ['**/*.html'],
+    files: ["**/*.html"],
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
+      eslintPluginPrettierRecommended,
     ],
     rules: {
-      // "prettier/prettier": ["error", { "parser": "angular" }]
+      "prettier/prettier": [
+        "error",
+        {
+          parser: "angular",
+          tabWidth: 2,
+          useTabs: false,
+          singleQuote: true,
+          semi: true,
+          bracketSpacing: true,
+          arrowParens: "always",
+          trailingComma: "none",
+          bracketSameLine: true,
+          printWidth: 80,
+        },
+      ],
     },
-  }
+  },
 );

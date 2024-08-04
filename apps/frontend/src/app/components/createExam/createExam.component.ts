@@ -2,6 +2,8 @@ import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LoaderComponent } from '../../components/common/loader/loader.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -15,11 +17,7 @@ import { SkeletonComponent } from '../common/skeleton/skeleton.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { ViewportScroller } from '@angular/common';
-
-interface Exercise {
-  description: string;
-  quantity: number;
-}
+import { FormBuilder, FormArray, FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-create-exam',
@@ -37,7 +35,11 @@ interface Exercise {
     TranslateModule,
     MatProgressSpinnerModule,
     SkeletonComponent,
-  ],
+    MatSelectModule,
+    MatCheckboxModule,
+    FormsModule,
+    ReactiveFormsModule
+  ]
 })
 export class CreateExamComponent {
   sanitizer = inject(DomSanitizer);
@@ -45,151 +47,120 @@ export class CreateExamComponent {
   matSnackBar = inject(MatSnackBar);
   translateService = inject(TranslateService);
   viewportScroller = inject(ViewportScroller);
+  formBuilder = inject(FormBuilder);
 
-  exercises: {
-    uniqueSelection: Exercise[];
-    development: Exercise[];
-    trueOrFalse: Exercise[];
-  } = {
-    uniqueSelection: [],
-    development: [],
-    trueOrFalse: [],
-  };
-  readonly sections = Object.keys(
-    this.exercises
-  ) as (keyof typeof this.exercises)[];
+  subjects = ['languageAndCommunication', 'mathematics', 'physics', 'chemistry', 'biology', 'naturalSciences', 'geographyAndSocialSciences', 'physicalEducation', 'visualArts', 'music', 'technology'];
+
+  examDataForm = new FormGroup({
+    exercises: this.formBuilder.group({
+      uniqueSelection: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      ),
+      development: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      ),
+      trueOrFalse: new FormArray(
+        [] as FormGroup<{
+          description: FormControl<string | null>;
+          quantity: FormControl<number | null>;
+        }>[]
+      )
+    }),
+    subject: new FormControl('', [Validators.required, Validators.minLength(1)]),
+    whiteSheets: new FormControl(0, [Validators.required, Validators.max(10)]),
+    includeAnswers: new FormControl(true, [Validators.required])
+  });
+
+  readonly sections = ['uniqueSelection', 'development', 'trueOrFalse'] as const;
+  getSectionArray(section: (typeof this.sections)[number]) {
+    return this.examDataForm.get('exercises.' + section) as FormArray;
+  }
 
   isCreatingPdf = false;
   pdfUrl: undefined | SafeResourceUrl = undefined;
 
   setExample() {
-    this.exercises = {
-      uniqueSelection: [
-        { description: 'Multiplicación de matrices', quantity: 3 },
-      ],
-      development: [
-        {
-          description: 'Se da una función cuadrática y se pide su gráfica',
-          quantity: 3,
-        },
-      ],
-      trueOrFalse: [
-        { description: 'Multiplicación de números negativos', quantity: 3 },
-      ],
-    };
-  }
-
-  handleDescriptionInput(
-    event: Event,
-    section: keyof typeof this.exercises,
-    index: number
-  ) {
-    const { value } = event.target as HTMLInputElement;
-    this.exercises[section][index].description = value;
-  }
-
-  updateQuantityWithKeyboard(event: KeyboardEvent) {
-    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown')
-      event.preventDefault();
-  }
-
-  updateQuantity(
-    event: Event,
-    section: keyof typeof this.exercises,
-    index: number
-  ) {
-    const exercise = this.exercises[section][index];
-    exercise.quantity = Number((event.target as HTMLInputElement).value);
-  }
-
-  addRow(section: keyof typeof this.exercises) {
-    this.exercises[section].push({
-      description: '',
-      quantity: 1,
+    this.examDataForm = new FormGroup({
+      exercises: this.formBuilder.group({
+        uniqueSelection: new FormArray([
+          new FormGroup({
+            description: new FormControl('Multiplicación de matrices', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
+            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
+          }),
+          new FormGroup({
+            description: new FormControl('Suma de fracciones', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
+            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
+          })
+        ]),
+        development: new FormArray([
+          new FormGroup({
+            description: new FormControl('Se da una función cuadrática y se pide su gráfica', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
+            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
+          })
+        ]),
+        trueOrFalse: new FormArray([
+          new FormGroup({
+            description: new FormControl('Multiplicación de números negativos', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
+            quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
+          })
+        ])
+      }),
+      subject: new FormControl('mathematics', [Validators.required, Validators.maxLength(200)]),
+      whiteSheets: new FormControl(0, [Validators.required, Validators.max(10)]),
+      includeAnswers: new FormControl(true, [Validators.required])
     });
   }
 
-  deleteRow(section: keyof typeof this.exercises, index: number) {
-    this.exercises[section].splice(index, 1);
+  addRow(section: (typeof this.sections)[number]) {
+    const exerciseSection = this.examDataForm.get('exercises.' + section) as FormArray;
+    exerciseSection.push(
+      new FormGroup({
+        description: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),
+        quantity: new FormControl(1, [Validators.required, Validators.min(1), Validators.max(10)])
+      })
+    );
+  }
+
+  deleteRow(section: (typeof this.sections)[number], index: number) {
+    const exerciseSection = this.examDataForm.get('exercises.' + section) as FormArray;
+    exerciseSection.removeAt(index);
   }
 
   getExamCanBeCreated(): boolean {
-    const sections = Object.keys(
-      this.exercises
-    ) as (keyof typeof this.exercises)[];
-    const sumOfExercisesIsGreaterThanZero =
-      sections.reduce(
-        (totalSum, section) =>
-          totalSum +
-          this.exercises[section].reduce(
-            (sum, exercise) => sum + exercise.quantity,
-            0
-          ),
-        0
-      ) > 0;
-    const everyDescriptionIsNotEmpty = sections.reduce(
-      (totalSum, section) =>
-        totalSum &&
-        this.exercises[section].reduce(
-          (sum, exercise) => sum && exercise.description.length > 0,
-          true
-        ),
-      true
-    );
-    return (
-      sumOfExercisesIsGreaterThanZero &&
-      everyDescriptionIsNotEmpty &&
-      !this.isCreatingPdf
-    );
+    const thereIsAtLeastExercise = this.sections.some((section) => Number(this.examDataForm.value.exercises?.[section]?.length) > 0);
+    return thereIsAtLeastExercise && this.examDataForm.valid && !this.isCreatingPdf;
   }
 
-  async createTest() {
-    this.matSnackBar.open(
-      await firstValueFrom(
-        this.translateService.get('createExam.initExamCreation')
-      ),
-      '',
-      { horizontalPosition: 'right', duration: 60 * 1000 }
-    );
+  async createTest(event: Event) {
+    event.preventDefault();
+
+    this.matSnackBar.open(await firstValueFrom(this.translateService.get('createExam.initExamCreation')), '', { horizontalPosition: 'right', duration: 60 * 1000 });
 
     this.isCreatingPdf = true;
-    const exercises: Partial<typeof this.exercises> = {};
-    (Object.keys(this.exercises) as (keyof typeof this.exercises)[]).forEach(
-      section => {
-        if (this.exercises[section].length > 0)
-          exercises[section] = this.exercises[section];
-      }
-    );
     try {
       const pdfName = await firstValueFrom(
-        this.httpClient.post(
-          '/api/exam',
-          { exercises },
-          { responseType: 'text' }
-        )
+        this.httpClient.post('/api/exam', this.examDataForm.value, {
+          responseType: 'text'
+        })
       );
-      this.matSnackBar.open(
-        await firstValueFrom(
-          this.translateService.get('createExam.examCreationSucceded')
-        ),
-        await firstValueFrom(this.translateService.get('createExam.close')),
-        { horizontalPosition: 'right' }
-      );
+      this.matSnackBar.open(await firstValueFrom(this.translateService.get('createExam.examCreationSucceded')), await firstValueFrom(this.translateService.get('createExam.close')), {
+        horizontalPosition: 'right'
+      });
 
-      this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-        `/api/pdf/${pdfName}`
-      );
+      this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`/api/pdf/${pdfName}`);
       setTimeout(() => this.viewportScroller.scrollToAnchor('exam-pdf'), 100);
     } catch (error) {
       console.error(error);
       this.pdfUrl = undefined;
-      this.matSnackBar.open(
-        await firstValueFrom(
-          this.translateService.get('createExam.examCreationFailed')
-        ),
-        await firstValueFrom(this.translateService.get('createExam.close')),
-        { horizontalPosition: 'right' }
-      );
+      this.matSnackBar.open(await firstValueFrom(this.translateService.get('createExam.examCreationFailed')), await firstValueFrom(this.translateService.get('createExam.close')), {
+        horizontalPosition: 'right'
+      });
     }
     this.isCreatingPdf = false;
   }

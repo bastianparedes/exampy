@@ -28,4 +28,17 @@ type ExercisesLatex = {
   }[];
 };
 
-export { ExercisesDescription, ExercisesLatex };
+type Subject =
+  | 'languageAndCommunication'
+  | 'mathematics'
+  | 'physics'
+  | 'chemistry'
+  | 'biology'
+  | 'naturalSciences'
+  | 'geographyAndSocialSciences'
+  | 'physicalEducation'
+  | 'visualArts'
+  | 'music'
+  | 'technology';
+
+export { ExercisesDescription, ExercisesLatex, Subject };
