@@ -12,27 +12,50 @@ import { writeFileSync } from 'fs';
 const yamlExampleUniqueSelection = `
 uniqueSelection:
   - question: >
-      Primera parte de la pregunta
-      Segunda parte de la pregunta
+      ¿Cuál de los siguientes gráficos corresponse a una función cuadrática?
     answers:
       - >
-        Respuesta correcta
+        \\begin{tikzpicture}
+        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
+        \\addplot[draw=red] {x^2};
+        \\end{axis}
+        \\end{tikzpicture}
       - >
-        Contenido de la segunda alternativa
+        \\begin{tikzpicture}
+        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
+        \\addplot[draw=red] {x*2};
+        \\end{axis}
+        \\end{tikzpicture}
       - >
-        Contenido de la tercera alternativa
+        \\begin{tikzpicture}
+        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
+        \\addplot[draw=red] {x^3};
+        \\end{axis}
+        \\end{tikzpicture}
       - >
-        Contenido de la cuarta alternativa
+        \\begin{tikzpicture}
+        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
+        \\addplot[draw=red] {x*3-4};
+        \\end{axis}
+        \\end{tikzpicture}
       - >
-        Contenido de la quinta alternativa
+        \\begin{tikzpicture}
+        \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
+        \\addplot[draw=red] {ln(x)};
+        \\end{axis}
+        \\end{tikzpicture}
 `.trim();
 
 const yamlExampleDevelopment = `
 development:
   - question: >
-      Pregunta que se debe responder
+      Haz un gráfico de función. $f(x)={x}^{2}$
     answer: >
-      Respuesta correcta
+      \\begin{tikzpicture}
+      \\begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\\footnotesize}]
+      \\addplot[draw=red] {x^2};
+      \\end{axis}
+      \\end{tikzpicture}
 `.trim();
 
 const yamlExampleTrueOrFalse = `

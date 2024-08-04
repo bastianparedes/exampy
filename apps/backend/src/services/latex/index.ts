@@ -29,7 +29,7 @@ export class LatexService {
     const questionsLatex = [
       '\\hfill \\break',
       '\\textbf{Item selección múltiple:} Encierra la alternativa correcta de cada ejercicio.%',
-      '\\begin{longtable}{|p{0.475\\linewidth}|p{0.475\\linewidth}|}%',
+      '\\begin{longtable}{|p{0.975\\linewidth}|}%',
       '\\hline%',
     ];
 
@@ -57,7 +57,7 @@ export class LatexService {
 
       shuffledArray.forEach((answer) => {
         questionsLatex.push('\\item%');
-        questionsLatex.push('\\adjustbox{valign=t}{%');
+        questionsLatex.push('\\adjustbox{valign=t, minipage=\\linewidth}{%');
         questionsLatex.push(answer.trim() + '%');
         questionsLatex.push('}%');
       });
@@ -65,16 +65,8 @@ export class LatexService {
       questionsLatex.push('\\end{enumerate}%');
       questionsLatex.push('\\vspace{5pt}%');
       questionsLatex.push('\\end{minipage}%');
-
-      const isLastExercise = indexExercise + 1 === exercises.length;
-
-      if (indexExercise % 2 === 0) {
-        questionsLatex.push('&%');
-      }
-      if (indexExercise % 2 === 1 || isLastExercise) {
-        questionsLatex.push('\\\\%');
-        questionsLatex.push(`\\hline%`);
-      }
+      questionsLatex.push('\\\\%');
+      questionsLatex.push(`\\hline%`);
     });
 
     questionsLatex.push('\\end{longtable}%');
@@ -108,7 +100,7 @@ export class LatexService {
       questionsLatex.push('\\hfill \\break%');
 
       correctAnswersLatex.push('\\item%');
-      correctAnswersLatex.push('\\adjustbox{valign=t}{%');
+      correctAnswersLatex.push('\\adjustbox{valign=t, minipage=\\linewidth}{%');
       correctAnswersLatex.push(exercise.answer.trim() + '%');
       correctAnswersLatex.push('}%');
     });
@@ -137,7 +129,7 @@ export class LatexService {
     questionsLatex.push(`\\begin{enumerate}[label=\\arabic*),start=1]%`);
     exercises.forEach((exercise) => {
       questionsLatex.push('\\item%');
-      questionsLatex.push('\\_\\_\\_ \\begin{minipage}[t]{\\linewidth}%');
+      questionsLatex.push('___ \\begin{minipage}[t]{\\linewidth}%');
       questionsLatex.push(exercise.question + '%');
       questionsLatex.push('\\end{minipage}%');
 

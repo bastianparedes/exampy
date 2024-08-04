@@ -16,9 +16,7 @@ const arrayIncludesElement = <T, U>(array: T[], element: U) => {
   });
 };
 
-function arraysAreEqual<
-  T extends (string | number | boolean | undefined | null)[],
->(array1: T, array2: T) {
+function arraysAreEqual<T extends (string | number | boolean | undefined | null)[]>(array1: T, array2: T) {
   if (array1.length !== array2.length) {
     return false;
   }
@@ -54,11 +52,4 @@ function createArrayUpToNumber(number: number): number[] {
   return Array.from({ length: number + 1 }, (_, index) => index);
 }
 
-export {
-  everyElementIsDifferent,
-  arrayIncludesElement,
-  arraysAreEqual,
-  shuffleArray,
-  reorderArrayByIndexes,
-  createArrayUpToNumber,
-};
+export { everyElementIsDifferent, arrayIncludesElement, arraysAreEqual, shuffleArray, reorderArrayByIndexes, createArrayUpToNumber };

@@ -63,9 +63,6 @@ class BodyValidator {
   @IsBoolean()
   includeAnswers: boolean;
 
-  @IsBoolean()
-  includeGraphs: boolean;
-
   @IsString()
   @IsIn([
     'languageAndCommunication',

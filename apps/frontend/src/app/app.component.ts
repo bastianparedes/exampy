@@ -17,9 +17,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.showNav = this.pathsToShowNav.some(path =>
-          event.urlAfterRedirects.includes(path)
-        );
+        this.showNav = this.pathsToShowNav.some(path => event.urlAfterRedirects.includes(path));
       }
     });
   }

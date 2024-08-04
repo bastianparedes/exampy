@@ -15,10 +15,7 @@ export class ProgressComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['percentage'] !== undefined) {
-      this.adecuatePercentage = Math.min(
-        Math.max(0, changes['percentage'].currentValue),
-        100
-      );
+      this.adecuatePercentage = Math.min(Math.max(0, changes['percentage'].currentValue), 100);
     }
   }
 }
