@@ -1,7 +1,7 @@
-import { Controller, Inject, Post, Body, Req, Res, Get } from '@nestjs/common';
-import { AiService } from '../services/ai.service';
+import { Controller, Inject, Post, Body, Req, Res } from '@nestjs/common';
+import { AiService } from '../services/ai';
 import { DbService } from '../services/db';
-import { LatexService } from '../services/latex.service';
+import { LatexService } from '../services/latex';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import {
   IsInt,
@@ -20,20 +20,7 @@ import {
 import { Type } from 'class-transformer';
 import { getShuffledArray } from '../utils/array';
 import { writeFileSync } from 'fs';
-
-const subjects = [
-  'languageAndCommunication',
-  'mathematics',
-  'physics',
-  'chemistry',
-  'biology',
-  'naturalSciences',
-  'geographyAndSocialSciences',
-  'physicalEducation',
-  'visualArts',
-  'music',
-  'technology',
-] as const;
+import { Subject } from '../types/exercise';
 
 class ExerciseDescriptionValidator {
   @IsString()
@@ -80,8 +67,20 @@ class BodyValidator {
   includeGraphs: boolean;
 
   @IsString()
-  @IsIn(subjects)
-  subject: (typeof subjects)[number];
+  @IsIn([
+    'languageAndCommunication',
+    'mathematics',
+    'physics',
+    'chemistry',
+    'biology',
+    'naturalSciences',
+    'geographyAndSocialSciences',
+    'physicalEducation',
+    'visualArts',
+    'music',
+    'technology',
+  ])
+  subject: Subject;
 
   @IsInt()
   @Min(0)
@@ -139,8 +138,10 @@ export class ExamController {
       latexLinesAnswers.push(result.answers);
     }
 
+    const completeLatexCodeLines = [...latexLinesQuestions];
+    if (body.includeAnswers) completeLatexCodeLines.concat(latexLinesAnswers);
     const completeLatexCode = this.latexService.getCompleteLatexCode(
-      [...latexLinesQuestions, ...latexLinesAnswers].join('\n'),
+      completeLatexCodeLines.join('\n'),
     );
 
     if (process.env.NODE_ENV === 'development')

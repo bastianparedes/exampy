@@ -1,0 +1,15 @@
+uniqueSelection:
+  - question: >
+      Primera parte de la pregunta
+      Segunda parte de la pregunta
+    answers:
+      - >
+        Respuesta correcta
+      - >
+        Contenido de la segunda alternativa
+      - >
+        Contenido de la tercera alternativa
+      - >
+        Contenido de la cuarta alternativa
+      - >
+        Contenido de la quinta alternativa

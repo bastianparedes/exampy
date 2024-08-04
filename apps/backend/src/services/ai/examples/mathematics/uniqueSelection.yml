@@ -1,0 +1,50 @@
+uniqueSelection:
+  - question: >
+      Encuentra las soluciones al sistema de ecuaciones:
+      $\begin{cases}
+      x + y = 5 \\ x - y = 1
+      \end{cases}$
+    answers:
+      - >
+        $\left(3,2\right)$
+      - >
+        $\left(2,3\right)$
+      - >
+        $\left(1,5\right)$
+      - >
+        $\left(4,-1\right)$
+      - >
+        $\left(6,4\right)$
+  - question: >
+      ¿Cuál de los siguientes gráficos corresponse a una función cuadrática?
+    answers:
+      - >
+        \begin{tikzpicture}
+        \begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\footnotesize}]
+        \addplot[draw=red] {x^2};
+        \end{axis}
+        \end{tikzpicture}
+      - >
+        \begin{tikzpicture}
+        \begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\footnotesize}]
+        \addplot[draw=red] {x*2};
+        \end{axis}
+        \end{tikzpicture}
+      - >
+        \begin{tikzpicture}
+        \begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\footnotesize}]
+        \addplot[draw=red] {x^3};
+        \end{axis}
+        \end{tikzpicture}
+      - >
+        \begin{tikzpicture}
+        \begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\footnotesize}]
+        \addplot[draw=red] {x*3-4};
+        \end{axis}
+        \end{tikzpicture}
+      - >
+        \begin{tikzpicture}
+        \begin{axis}[width=7cm, height=5cm, domain=-5:5, samples=100, axis lines=middle, xlabel={$x$}, ylabel={$y$}, tick label style={font=\footnotesize}]
+        \addplot[draw=red] {ln(x)};
+        \end{axis}
+        \end{tikzpicture}

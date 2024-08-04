@@ -4,7 +4,7 @@
   </h1>
   <p class="mb-3">{{ 'createExam.description1' | translate }}</p>
   <p>{{ 'createExam.description2' | translate }}</p>
-  <form class="flex flex-col py-5 gap-4" [formGroup]="this.examDataForm" (submit)="createTest($event)">
+  <div class="flex flex-col py-5 gap-4" [formGroup]="this.examDataForm" (submit)="createTest($event)">
     <div
       class="relative h-10 flex justify-around text-white text-xs sm:text-base sm:h-12">
       <button
@@ -27,43 +27,45 @@
       </button>
     </div>
     <div class="flex gap-4">
-      <div class="flex flex-1 flex-col gap-8">
+      <div formGroupName="exercises" class="flex flex-1 flex-col gap-8">
         @for (section of this.sections; track $index) {
-          <section class="bg-slate-100 px-7 py-3 shadow-gray-500 shadow-md">
+          <section formArrayName="{{ section }}" class="bg-slate-100 px-7 py-3 shadow-gray-500 shadow-md">
             <h2 class="mb-3 text-2xl">
               {{ 'createExam.' + section | translate }}
             </h2>
             <div class="flex flex-col">
               @for (exercise of this.examDataForm.value.exercises?.[section]; track $index) {
-                <div class="py-0 px-0 flex flex-col md:flex-row md:gap-5">
-                  <mat-form-field class="border-none w-full" appearance="outline">
-                    <input
-                      matInput
-                      maxlength="200"
-                      placeholder="{{ 'createExam.example' | translate }}"
-                      required
-                      [value]="exercise.description"
-                      (input)="
-                        this.handleDescriptionInput($event, section, $index)
-                      " />
-                  </mat-form-field>
-                  <div class="flex justify-between md:gap-5">
-                    <mat-form-field class="w-24" appearance="outline">
+                <div formGroupName="{{ $index }}">
+                  <div class="py-0 px-0 flex flex-col md:flex-row md:gap-5">
+                    <mat-form-field class="border-none w-full" appearance="outline">
                       <input
                         matInput
-                        type="number"
-                        min="1"
-                        max="10"
+                        maxlength="200"
+                        placeholder="{{ 'createExam.example' | translate }}"
                         required
-                        (keydown)="this.updateQuantityWithKeyboard($event)"
-                        [value]="exercise.quantity"
-                        (input)="this.updateQuantity($event, section, $index)" />
+                        formControlName="description"
+                        (input)="
+                          this.handleDescriptionInput($event, section, $index)
+                        " />
                     </mat-form-field>
-                    <button mat-fab type="button" (click)="deleteRow(section, $index)">
-                      <mat-icon>delete</mat-icon>
-                    </button>
+                    <div class="flex justify-between md:gap-5">
+                      <mat-form-field class="w-24" appearance="outline">
+                        <input
+                          matInput
+                          type="number"
+                          min="1"
+                          max="10"
+                          required
+                          formControlName="quantity"
+                          (keydown)="this.updateQuantityWithKeyboard($event)"
+                          (input)="this.updateQuantity($event, section, $index)" />
+                      </mat-form-field>
+                      <button mat-fab type="button" (click)="deleteRow(section, $index)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
                   </div>
-                </div>
+              </div>
               }
             </div>
             <button
@@ -108,7 +110,7 @@
 
     </div>
     
-  </form>
+  </div>
   <div id="exam-pdf" class="relative w-full px-5 flex justify-center">
     @if (this.pdfUrl !== undefined && !this.isCreatingPdf) {
       <a class="open-document" [href]="this.pdfUrl" target="_blank">{{

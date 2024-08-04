@@ -1,9 +1,12 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { LatexService } from './latex.service';
+import { LatexService } from '../latex';
 import { generateText } from 'ai';
 import { google } from '@ai-sdk/google';
 import { load } from 'js-yaml';
-import type { ExercisesDescription, ExercisesLatex } from '../types/exercise';
+import type {
+  ExercisesDescription,
+  ExercisesLatex,
+} from '../../types/exercise';
 import { writeFileSync } from 'fs';
 
 const yamlExampleUniqueSelection = `

@@ -71,45 +71,17 @@ export class CreateExamComponent {
     'technology',
   ];
 
-  examDataForm = new FormGroup({
-    exercises: new FormGroup({
-      uniqueSelection: new FormArray<FormGroup<{
-        description: FormControl<string>;
-        quantity: FormControl<number>;
-      }>>([]),
-      development: new FormArray<FormGroup<{
-        description: FormControl<string>;
-        quantity: FormControl<number>;
-      }>>([]),
-      trueOrFalse: new FormArray<FormGroup<{
-        description: FormControl<string>;
-        quantity: FormControl<number>;
-      }>>([]),
+  examDataForm = this.formBuilder.group({
+    exercises: this.formBuilder.group({
+      uniqueSelection: this.formBuilder.array([{ description: 'string', quantity: 1 }]),
+      development: this.formBuilder.array([] as { description: string; quantity: number; }[]),
+      trueOrFalse: this.formBuilder.array([] as { description: string; quantity: number; }[]),
     }),
-    subject: new FormControl('', [ Validators.required, Validators.maxLength(100) ]),
-    whiteSheets: new FormControl(0, [ Validators.required, Validators.maxLength(100) ]),
-    includeGraphs: new FormControl(false, [ Validators.required, Validators.maxLength(100) ]),
-    includeAnswers: new FormControl(true, [ Validators.required, Validators.maxLength(100) ])
-  }) as FormGroup<{
-    exercises: FormGroup<{
-        uniqueSelection: FormArray<FormGroup<{
-            description: FormControl<string>;
-            quantity: FormControl<number>;
-        }>>;
-        development: FormArray<FormGroup<{
-            description: FormControl<string>;
-            quantity: FormControl<number>;
-        }>>;
-        trueOrFalse: FormArray<FormGroup<{
-          description: FormControl<string>;
-          quantity: FormControl<number>;
-        }>>;
-    }>;
-    subject: FormControl<string>;
-    whiteSheets: FormControl<number>;
-    includeGraphs: FormControl<boolean>;
-    includeAnswers: FormControl<boolean>;
-}>;
+    subject: this.formBuilder.control('', [ Validators.required, Validators.maxLength(200) ]),
+    whiteSheets: this.formBuilder.control(0, [ Validators.required, Validators.maxLength(100) ]),
+    includeGraphs: this.formBuilder.control(false, [ Validators.required, Validators.maxLength(100) ]),
+    includeAnswers: this.formBuilder.control(true, [ Validators.required, Validators.maxLength(100) ])
+  });
 
   readonly sections = ['uniqueSelection', 'development', 'trueOrFalse'] as const;
 
@@ -117,6 +89,7 @@ export class CreateExamComponent {
   pdfUrl: undefined | SafeResourceUrl = undefined;
 
   setExample() {
+    console.log(this.examDataForm.get('exercises.uniqueSelection')?.value);
     this.examDataForm.setValue({
       exercises: {
         uniqueSelection: [{ description: 'Multiplicación de matrices', quantity: 3 }],
@@ -128,6 +101,7 @@ export class CreateExamComponent {
       includeGraphs: true,
       includeAnswers: true,
     });
+    console.log(this.examDataForm.value);
   }
 
   handleDescriptionInput(
@@ -137,7 +111,7 @@ export class CreateExamComponent {
   ) {
     const { value } = event.target as HTMLInputElement;
     const exercise = this.examDataForm.value.exercises?.[section]?.[index];
-    if (exercise === undefined) return;
+    if (exercise === undefined || exercise === null ) return;
     exercise.description = value;
   }
 
@@ -153,7 +127,7 @@ export class CreateExamComponent {
   ) {
   
     const exercise = this.examDataForm.value.exercises?.[section]?.[index];
-    if (exercise === undefined) return;
+    if (exercise === undefined || exercise === null ) return;
     exercise.quantity = Number((event.target as HTMLInputElement).value);
   }
 
@@ -171,7 +145,7 @@ export class CreateExamComponent {
   getExamCanBeCreated(): boolean {
     const thereIsAtLeastExercise = this.sections.some((section) => Number(this.examDataForm.value.exercises?.[section]?.length) > 0);
     const everyDescriptionIsNotEmpty = this.sections.every((section) => this.examDataForm.value.exercises?.[section]?.every((exercise) => Number(exercise?.description?.length) > 0));
-    const subjectIsSelected = this.examDataForm.value.subject !== '';
+    const subjectIsSelected = this.examDataForm.value?.subject !== '';
     return (
       thereIsAtLeastExercise &&
       everyDescriptionIsNotEmpty &&

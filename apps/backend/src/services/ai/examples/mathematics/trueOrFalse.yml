@@ -1,0 +1,4 @@
+trueOrFalse:
+  - question: >
+      La gráfica de la función $f(x)={x}^{2}$ intercecta al eje X en un único punto
+    answer: true
