@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import type { ExercisesLatex } from '../../types/exercise';
 import { getShuffledArray } from '../../utils/array';
 /* import { readFileSync } from 'fs'; */
-import { join } from 'path';
+/* import { join } from 'path'; */
 
 @Injectable()
 export class LatexService {
