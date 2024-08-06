@@ -73,7 +73,6 @@ export class CreateExamComponent {
       )
     }),
     subject: new FormControl('', [Validators.required, Validators.minLength(1)]),
-    whiteSheets: new FormControl(0, [Validators.required, Validators.max(10)]),
     includeAnswers: new FormControl(true, [Validators.required])
   });
 
@@ -112,7 +111,6 @@ export class CreateExamComponent {
         ])
       }),
       subject: new FormControl('mathematics', [Validators.required, Validators.maxLength(200)]),
-      whiteSheets: new FormControl(0, [Validators.required, Validators.max(10)]),
       includeAnswers: new FormControl(true, [Validators.required])
     });
   }

@@ -88,18 +88,6 @@
               }
             </mat-select>
           </mat-form-field>
-          <div class="flex flex-col w-fit">
-            <span>{{ 'createExam.whiteSheets' | translate }}</span>
-            <mat-form-field class="w-24" appearance="outline">
-              <input
-                matInput
-                type="number"
-                min="0"
-                max="10"
-                value="0"
-                formControlName="whiteSheets" />
-            </mat-form-field>
-          </div>
           <mat-checkbox formControlName="includeAnswers">{{
             'createExam.includeAnswers' | translate
           }}</mat-checkbox>

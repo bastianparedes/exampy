@@ -53,11 +53,6 @@ class BodyValidator {
   @IsString()
   @IsIn(['languageAndCommunication', 'mathematics', 'physics', 'chemistry', 'biology', 'naturalSciences', 'geographyAndSocialSciences', 'physicalEducation', 'visualArts', 'music', 'technology'])
   subject: Subject;
-
-  @IsInt()
-  @Min(0)
-  @Max(10)
-  whiteSheets: number;
 }
 
 @Controller('exam')
@@ -97,7 +92,6 @@ export class ExamController {
     }
 
     let completeLatexCodeLines = [...latexLinesQuestions];
-    for (let i = 0; i < body.whiteSheets; i++) completeLatexCodeLines.push('\\newpage \\hfill \\break');
 
     if (body.includeAnswers) completeLatexCodeLines = completeLatexCodeLines.concat(latexLinesAnswers);
     const completeLatexCode = this.latexService.getCompleteLatexCode(completeLatexCodeLines.join('\n'));
