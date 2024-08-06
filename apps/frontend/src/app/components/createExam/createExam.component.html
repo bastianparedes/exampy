@@ -1,50 +1,59 @@
-<div class="px-2 md:px-5">
-  <h1 class="text-6xl text-center my-10">
+<div class="tw-px-2 md:tw-px-5">
+  <h1 class="tw-text-6xl tw-text-center tw-my-10">
     {{ 'createExam.title' | translate }}
   </h1>
-  <p class="mb-3">{{ 'createExam.description1' | translate }}</p>
+  <p class="tw-mb-3">{{ 'createExam.description1' | translate }}</p>
   <p>{{ 'createExam.description2' | translate }}</p>
   <form
-    class="flex flex-col py-5 gap-4"
+    class="tw-flex tw-flex-col tw-py-5 tw-gap-4"
     [formGroup]="this.examDataForm"
     (submit)="createTest($event)">
     <div
-      class="relative h-10 flex justify-around text-white text-xs sm:text-base sm:h-12">
+      class="tw-relative tw-h-10 tw-flex tw-justify-around tw-text-white tw-text-xs sm:tw-text-base sm:tw-h-12">
       <button
-        class="h-full flex flex-row text-nowrap gap-2 justify-center items-center bg-blue-700 rounded-3xl px-3 disabled:bg-gray-500 disabled:text-gray-300 sm:p-3 sm:w-52"
+        class="tw-h-full tw-flex tw-flex-row tw-text-nowrap tw-gap-2 tw-justify-center tw-items-center tw-bg-blue-700 tw-rounded-3xl tw-px-3 disabled:tw-bg-gray-500 disabled:tw-text-gray-300 sm:tw-p-3 sm:tw-w-52"
         type="button"
         [disabled]="this.isCreatingPdf"
         (click)="this.setExample()">
         {{ 'createExam.loadExample' | translate }}
       </button>
     </div>
-    <div class="flex gap-4 flex-col-reverse lg:flex-row">
-      <div formGroupName="exercises" class="flex flex-1 flex-col gap-8">
+    <div class="tw-flex tw-gap-4 tw-flex-col-reverse lg:tw-flex-row">
+      <div
+        formGroupName="exercises"
+        class="tw-flex tw-flex-1 tw-flex-col tw-gap-8">
         @for (section of this.sections; track section) {
           <section
             formArrayName="{{ section }}"
-            class="bg-white px-7 py-3 shadow-gray-500 shadow-md">
-            <h2 class="mb-3 text-2xl">
+            class="tw-bg-white tw-px-7 tw-py-3 tw-shadow-gray-500 tw-shadow-md">
+            <h2 class="tw-mb-3 tw-text-2xl">
               {{ 'createExam.' + section | translate }}
             </h2>
-            <div class="flex flex-col gap-6 md:gap-0">
+            <div class="tw-flex tw-flex-col tw-gap-6 md:tw-gap-0">
               @for (
                 exercise of this.getSectionArray(section).controls;
                 track exercise
               ) {
                 <div formGroupName="{{ $index }}">
-                  <div class="py-0 px-0 flex flex-col md:flex-row md:gap-5">
+                  <div
+                    class="tw-py-0 tw-px-0 tw-flex tw-flex-col md:tw-flex-row md:tw-gap-5">
                     <mat-form-field
-                      class="border-none w-full"
+                      class="tw-border-none tw-w-full"
                       appearance="outline">
+                      <mat-label>{{
+                        'createExam.description' | translate
+                      }}</mat-label>
                       <input
                         matInput
                         maxlength="200"
                         placeholder="{{ 'createExam.example' | translate }}"
                         formControlName="description" />
                     </mat-form-field>
-                    <div class="flex justify-between md:gap-5">
-                      <mat-form-field class="w-24" appearance="outline">
+                    <div class="tw-flex tw-justify-between md:tw-gap-5">
+                      <mat-form-field class="w-28" appearance="outline">
+                        <mat-label>{{
+                          'createExam.quantity' | translate
+                        }}</mat-label>
                         <input
                           matInput
                           type="number"
@@ -65,7 +74,7 @@
             </div>
             <button
               mat-flat-button
-              class="w-fit"
+              class="tw-w-fit"
               color="accent"
               type="button"
               (click)="this.addRow(section)">
@@ -75,12 +84,14 @@
         }
       </div>
       <aside
-        class="h-fit rounded-md bg-white p-5 shadow-gray-500 shadow-md w-full lg:w-80">
-        <div class="relative flex flex-col">
-          <mat-form-field class="w-full" appearance="outline">
-            <mat-select
-              placeholder="{{ 'createExam.subject' | translate }}"
-              formControlName="subject">
+        class="tw-h-fit tw-rounded-md tw-bg-white tw-p-5 tw-shadow-gray-500 tw-shadow-md tw-w-full lg:tw-w-80">
+        <div class="tw-relative tw-flex tw-flex-col">
+          <mat-form-field
+            class="tw-w-full"
+            [enterKeyHint]="false"
+            appearance="outline">
+            <mat-label>{{ 'createExam.subject' | translate }}</mat-label>
+            <mat-select formControlName="subject">
               @for (subject of this.subjects; track $index) {
                 <mat-option [value]="subject">{{
                   'createExam.' + subject | translate
@@ -92,7 +103,7 @@
             'createExam.includeAnswers' | translate
           }}</mat-checkbox>
           <button
-            class="w-52 h-12 mx-auto flex flex-row text-nowrap gap-2 justify-center items-center bg-blue-700 rounded-3xl px-3 text-white disabled:bg-gray-500 disabled:text-gray-300"
+            class="tw-w-52 tw-h-12 tw-mx-auto tw-flex tw-flex-row tw-text-nowrap tw-gap-2 tw-justify-center tw-items-center tw-bg-blue-700 tw-rounded-3xl tw-px-3 tw-text-white disabled:tw-bg-gray-500 disabled:tw-text-gray-300"
             type="submit"
             [disabled]="!this.getExamCanBeCreated()">
             @if (this.isCreatingPdf) {
@@ -106,7 +117,9 @@
       </aside>
     </div>
   </form>
-  <div id="exam-pdf" class="relative w-full px-5 flex justify-center">
+  <div
+    id="exam-pdf"
+    class="tw-relative tw-w-full tw-px-5 tw-flex tw-justify-center">
     @if (this.pdfUrl !== undefined && !this.isCreatingPdf) {
       <a class="open-document" [href]="this.pdfUrl" target="_blank">{{
         'createExam.openDocument' | translate
