@@ -1,23 +1,22 @@
 import { Component, inject } from '@angular/core';
+import { ViewportScroller } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { LoaderComponent } from '../../components/common/loader/loader.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { ProgressComponent } from '../../components/common/progress/progress.component';
-import { TranslateModule } from '@ngx-translate/core';
-import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
-import { SkeletonComponent } from '../common/skeleton/skeleton.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
+import { FormArray, FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslateModule } from '@ngx-translate/core';
+import { firstValueFrom } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { ViewportScroller } from '@angular/common';
-import { FormBuilder, FormArray, FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LoaderComponent } from '../../components/common/loader/loader.component';
+import { ProgressComponent } from '../../components/common/progress/progress.component';
 
 @Component({
   selector: 'app-create-exam',
@@ -34,7 +33,6 @@ import { FormBuilder, FormArray, FormGroup, FormControl, FormsModule, ReactiveFo
     ProgressComponent,
     TranslateModule,
     MatProgressSpinnerModule,
-    SkeletonComponent,
     MatSelectModule,
     MatCheckboxModule,
     FormsModule,
@@ -47,12 +45,11 @@ export class CreateExamComponent {
   matSnackBar = inject(MatSnackBar);
   translateService = inject(TranslateService);
   viewportScroller = inject(ViewportScroller);
-  formBuilder = inject(FormBuilder);
 
   subjects = ['languageAndCommunication', 'mathematics', 'physics', 'chemistry', 'biology', 'naturalSciences', 'geographyAndSocialSciences', 'physicalEducation', 'visualArts', 'music', 'technology'];
 
   examDataForm = new FormGroup({
-    exercises: this.formBuilder.group({
+    exercises: new FormGroup({
       uniqueSelection: new FormArray(
         [] as FormGroup<{
           description: FormControl<string | null>;
@@ -86,7 +83,7 @@ export class CreateExamComponent {
 
   setExample() {
     this.examDataForm = new FormGroup({
-      exercises: this.formBuilder.group({
+      exercises: new FormGroup({
         uniqueSelection: new FormArray([
           new FormGroup({
             description: new FormControl('Multiplicación de matrices', [Validators.required, Validators.minLength(1), Validators.maxLength(200)]),

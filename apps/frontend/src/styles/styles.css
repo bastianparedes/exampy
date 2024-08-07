@@ -1,34 +1,13 @@
+@import "normalize.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field.mat-mdc-form-field .mdc-notched-outline__notch {
-  border-right-style: hidden;
+a {
+  text-decoration: none;
 }
 
-.mat-mdc-input-element {
-  box-shadow: none !important;
-}
-
-.sticky {
-  position: sticky !important;
-}
-
-[type='text'],
-[type='email'],
-[type='url'],
-[type='password'],
-[type='number'],
-[type='date'],
-[type='datetime-local'],
-[type='month'],
-[type='search'],
-[type='tel'],
-[type='time'],
-[type='week'],
-[multiple],
-textarea,
-select {
-  padding: 0;
-  border: none;
+.mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
+  display: none;
 }

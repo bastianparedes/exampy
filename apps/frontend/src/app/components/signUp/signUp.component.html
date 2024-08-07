@@ -1,0 +1,51 @@
+<form
+  class="tw-bg-white tw-flex tw-flex-col tw-p-5 tw-gap-4 tw-mx-auto tw-my-5 tw-min-w-64 tw-w-9/12 tw-max-w-2xl tw-rounded-lg"
+  [formGroup]="this.userData"
+  (submit)="onSubmit($event)">
+  <div class="relative tw-flex tw-flex-col tw-gap-[inherit] md:tw-flex-row">
+    <mat-form-field class="tw-bg-white tw-rounded-md tw-flex-1">
+      <mat-label>{{ 'signUp.firstName' | translate }}</mat-label>
+      <input matInput maxlength="255" formControlName="firstName" />
+    </mat-form-field>
+
+    <mat-form-field class="tw-bg-white tw-rounded-md tw-flex-1">
+      <mat-label>{{ 'signUp.lastName' | translate }}</mat-label>
+      <input matInput maxlength="255" formControlName="lastName" />
+    </mat-form-field>
+  </div>
+
+  <mat-form-field class="tw-bg-white tw-rounded-md">
+    <mat-label>{{ 'signUp.email' | translate }}</mat-label>
+    <input type="email" matInput formControlName="email" />
+  </mat-form-field>
+
+  <mat-form-field class="tw-bg-white tw-rounded-md">
+    <mat-label>{{ 'signUp.password' | translate }}</mat-label>
+    <input
+      matInput
+      type="password"
+      maxlength="255"
+      formControlName="password" />
+    <button mat-icon-button matSuffix [attr.aria-label]="'Hide password'">
+      <mat-icon>{{ true ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-form-field class="tw-bg-white tw-rounded-md">
+    <mat-label>{{ 'signUp.confirmPassword' | translate }}</mat-label>
+    <input
+      matInput
+      type="password"
+      maxlength="255"
+      formControlName="confirmPassword" />
+    <button mat-icon-button matSuffix [attr.aria-label]="'Hide password'">
+      <mat-icon>{{ true ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+  </mat-form-field>
+  <button
+    mat-flat-button
+    class="tw-w-fit tw-mx-auto"
+    [disabled]="this.userData.invalid">
+    {{ 'signUp.createAccount' | translate }}
+  </button>
+</form>

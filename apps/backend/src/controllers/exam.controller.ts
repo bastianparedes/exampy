@@ -106,7 +106,8 @@ export class ExamController {
 
     res.send(lastPathSection);
     await this.dbService.db.insert(this.dbService.schema.Exams).values({
-      name: lastPathSection
+      name: lastPathSection,
+      texCode: completeLatexCode
     });
   }
 }
