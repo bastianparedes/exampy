@@ -1,0 +1,44 @@
+<form
+  class="tw-bg-white tw-flex tw-flex-col tw-p-5 tw-gap-4 tw-mx-auto tw-my-5 tw-min-w-64 tw-w-9/12 tw-max-w-2xl tw-rounded-lg"
+  [formGroup]="this.userData"
+  (submit)="onSubmit($event)">
+  <mat-form-field class="tw-bg-white tw-rounded-md">
+    <mat-label>{{ 'logIn.email' | translate }}</mat-label>
+    <input type="email" matInput formControlName="email" />
+  </mat-form-field>
+
+  <mat-form-field class="tw-bg-white tw-rounded-md">
+    <mat-label>{{ 'logIn.password' | translate }}</mat-label>
+    <input
+      matInput
+      [type]="this.hidePassword ? 'password' : 'text'"
+      maxlength="255"
+      formControlName="password" />
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="this.toggleHidePassword()"
+      type="button">
+      <mat-icon>{{
+        this.hidePassword ? 'visibility_off' : 'visibility'
+      }}</mat-icon>
+    </button>
+  </mat-form-field>
+  <mat-checkbox class="example-margin" formControlName="keepSesion">{{
+    'logIn.rememberMe' | translate
+  }}</mat-checkbox>
+
+  <button
+    mat-flat-button
+    class="tw-w-fit tw-mx-auto"
+    [disabled]="this.userData.invalid">
+    {{ 'logIn.logIn' | translate }}
+  </button>
+
+  <p class="tw-text-center tw-my-0">
+    {{ 'logIn.haveAccount' | translate }}
+    <a class="tw-text-blue-500" href="/sign_up">{{
+      'logIn.signUp' | translate
+    }}</a>
+  </p>
+</form>

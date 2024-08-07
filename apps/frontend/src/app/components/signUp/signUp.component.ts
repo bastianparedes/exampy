@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators, type ValidatorFn, type ValidationErrors } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sign-up',
@@ -13,6 +16,9 @@ import { MatInputModule } from '@angular/material/input';
   templateUrl: './signUp.component.html'
 })
 export class SignUpComponent {
+  httpClient = inject(HttpClient);
+  router = inject(Router);
+
   userData = new FormGroup(
     {
       firstName: new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]),
@@ -33,9 +39,20 @@ export class SignUpComponent {
     };
   }
 
-  onSubmit(event: Event): void {
+  hidePassword = true;
+  toggleHidePassword() {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  async onSubmit(event: Event) {
     event.preventDefault();
-    console.log(this.userData.errors);
-    console.log({ password: this.userData.get('password')?.valid, confirmPassword: this.userData.get('confirmPassword')?.valid });
+
+    firstValueFrom(this.httpClient.post('/api/auth/sign_up', this.userData.value))
+      .then(() => {
+        this.router.navigate(['/log_in']);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 }

@@ -23,11 +23,13 @@
     <mat-label>{{ 'signUp.password' | translate }}</mat-label>
     <input
       matInput
-      type="password"
+      [type]="this.hidePassword ? 'password' : 'text'"
       maxlength="255"
       formControlName="password" />
-    <button mat-icon-button matSuffix [attr.aria-label]="'Hide password'">
-      <mat-icon>{{ true ? 'visibility_off' : 'visibility' }}</mat-icon>
+    <button mat-icon-button matSuffix (click)="this.toggleHidePassword()">
+      <mat-icon>{{
+        this.hidePassword ? 'visibility_off' : 'visibility'
+      }}</mat-icon>
     </button>
   </mat-form-field>
 
@@ -35,17 +37,25 @@
     <mat-label>{{ 'signUp.confirmPassword' | translate }}</mat-label>
     <input
       matInput
-      type="password"
+      [type]="this.hidePassword ? 'password' : 'text'"
       maxlength="255"
       formControlName="confirmPassword" />
-    <button mat-icon-button matSuffix [attr.aria-label]="'Hide password'">
-      <mat-icon>{{ true ? 'visibility_off' : 'visibility' }}</mat-icon>
+    <button mat-icon-button matSuffix (click)="this.toggleHidePassword()">
+      <mat-icon>{{
+        this.hidePassword ? 'visibility_off' : 'visibility'
+      }}</mat-icon>
     </button>
   </mat-form-field>
   <button
     mat-flat-button
     class="tw-w-fit tw-mx-auto"
     [disabled]="this.userData.invalid">
-    {{ 'signUp.createAccount' | translate }}
+    {{ 'signUp.signUp' | translate }}
   </button>
+  <p class="tw-text-center tw-my-0">
+    {{ 'signUp.haveAccount' | translate }}
+    <a class="tw-text-blue-500" href="/log_in">{{
+      'signUp.logIn' | translate
+    }}</a>
+  </p>
 </form>

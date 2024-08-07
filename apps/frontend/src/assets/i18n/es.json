@@ -5,8 +5,8 @@
     "exercises": "Ejercicios",
     "createExam": "Crear examen",
     "help": "Ayuda",
-    "login": "Iniciar sesión",
-    "logout": "Cerrar sesión"
+    "logIn": "Iniciar sesión",
+    "logOut": "Cerrar sesión"
   },
   "home": {
     "title1": "Por un profesor, para profesores",
@@ -53,6 +53,16 @@
     "email": "E-mail",
     "password": "Contraseña",
     "confirmPassword": "Confirmar contraseña",
-    "createAccount": "Crear cuenta"
+    "signUp": "Crear cuenta",
+    "haveAccount": "¿Ya tienes una cuenta?",
+    "logIn": "Inicia sesión"
+  },
+  "logIn": {
+    "email": "E-mail",
+    "password": "Contraseña",
+    "rememberMe": "Recuérdame",
+    "logIn": "Iniciar sesión",
+    "haveAccount": "¿Aún no tienes una cuenta?",
+    "signUp": "Regístrate"
   }
 }

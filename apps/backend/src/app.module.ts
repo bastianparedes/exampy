@@ -13,7 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '1h' }
+      signOptions: { expiresIn: '1d' }
     })
   ],
   controllers: [HealthController, ExamController, AuthController],
