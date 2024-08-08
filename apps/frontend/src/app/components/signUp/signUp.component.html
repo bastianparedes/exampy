@@ -76,9 +76,12 @@
     }}</label>
   </p-floatLabel>
 
-  <p-button class="tw-mx-auto" [disabled]="this.userData.invalid">{{
-    'logIn.signUp' | translate
-  }}</p-button>
+  <p-button
+    class="tw-mx-auto"
+    type="submit"
+    [disabled]="this.userData.invalid"
+    >{{ 'logIn.signUp' | translate }}</p-button
+  >
 
   <p class="tw-text-center tw-my-0">
     {{ 'signUp.haveAccount' | translate }}

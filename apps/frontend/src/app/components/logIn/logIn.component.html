@@ -36,9 +36,12 @@
     <label for="keepSesion">{{ 'logIn.rememberMe' | translate }}</label>
   </div>
 
-  <p-button class="tw-mx-auto" [disabled]="this.userData.invalid">{{
-    'logIn.logIn' | translate
-  }}</p-button>
+  <p-button
+    class="tw-mx-auto"
+    type="submit"
+    [disabled]="this.userData.invalid"
+    >{{ 'logIn.logIn' | translate }}</p-button
+  >
 
   <p class="tw-text-center tw-my-0">
     {{ 'logIn.haveAccount' | translate }}

@@ -8,14 +8,26 @@
 
     <div [class]="this.isOpen ? 'links-open' : 'links-closed'">
       <a
-        class="tw-text-white tw-rounded-2xl tw-py-2 tw-px-3 tw-flex tw-justify-center tw-items-center tw-text-nowrap hover:tw-bg-sky-700"
+        class="tw-text-white tw-rounded-2xl tw-py-2 tw-px-3 tw-flex tw-justify-center tw-items-center tw-text-nowrap"
         href="/"
         >{{ 'nav.home' | translate }}</a
       >
       <a
-        class="tw-text-white tw-rounded-2xl tw-py-2 tw-px-3 tw-flex tw-justify-center tw-items-center tw-text-nowrap hover:tw-bg-sky-700"
+        class="tw-text-white tw-rounded-2xl tw-py-2 tw-px-3 tw-flex tw-justify-center tw-items-center tw-text-nowrap"
         href="/create_exam"
         >{{ 'nav.createExam' | translate }}</a
+      >
+    </div>
+    <div class="tw-flex">
+      <a
+        class="tw-text-white tw-rounded-2xl tw-py-2 tw-px-3 tw-flex tw-justify-center tw-items-center tw-text-nowrap"
+        href="/log_in"
+        >{{ 'nav.logIn' | translate }}</a
+      >
+      <a
+        class="tw-text-white tw-rounded-2xl tw-py-2 tw-px-3 tw-flex tw-justify-center tw-items-center tw-text-nowrap"
+        href="/sign_up"
+        >{{ 'nav.signUp' | translate }}</a
       >
     </div>
   </div>
