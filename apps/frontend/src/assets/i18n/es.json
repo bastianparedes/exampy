@@ -27,8 +27,7 @@
     "uniqueSelection": "Selección única",
     "development": "Desarrollo",
     "trueOrFalse": "Verdadero o Falso",
-    "close": "Cerrar",
-    "initExamCreation": "Creando examen, eso puede demorar...",
+    "initExamCreation": "Creando examen, esto puede demorar...",
     "examCreationFailed": "Ocurrió un error creando el examen. Inténtalo más tarde",
     "examCreationSucceded": "Examen creado con éxito!",
     "openDocument": "Ver documento",
@@ -55,7 +54,8 @@
     "confirmPassword": "Confirmar contraseña",
     "signUp": "Crear cuenta",
     "haveAccount": "¿Ya tienes una cuenta?",
-    "logIn": "Inicia sesión"
+    "logIn": "Inicia sesión",
+    "passwordsMustBeEqual": "* Las contraseñas deben ser iguales"
   },
   "logIn": {
     "email": "E-mail",

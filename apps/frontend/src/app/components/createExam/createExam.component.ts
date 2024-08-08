@@ -1,52 +1,65 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+import { InputTextModule } from 'primeng/inputtext';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { DropdownModule } from 'primeng/dropdown';
+import { MessagesModule } from 'primeng/messages';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { RippleModule } from 'primeng/ripple';
+import { SkeletonModule } from 'primeng/skeleton';
+
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { FormArray, FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import { firstValueFrom } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { LoaderComponent } from '../../components/common/loader/loader.component';
-import { ProgressComponent } from '../../components/common/progress/progress.component';
 
 @Component({
   selector: 'app-create-exam',
   templateUrl: './createExam.component.html',
   styleUrl: './createExam.component.scss',
   standalone: true,
+  providers: [MessageService],
   imports: [
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    MatFormFieldModule,
-    LoaderComponent,
-    MatPaginatorModule,
-    ProgressComponent,
     TranslateModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
-    MatCheckboxModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputTextModule,
+    FloatLabelModule,
+    ButtonModule,
+    CheckboxModule,
+    DropdownModule,
+    InputNumberModule,
+    ToastModule,
+    RippleModule,
+    MessagesModule,
+    SkeletonModule
   ]
 })
-export class CreateExamComponent {
+export class CreateExamComponent implements OnInit {
   sanitizer = inject(DomSanitizer);
   httpClient = inject(HttpClient);
-  matSnackBar = inject(MatSnackBar);
   translateService = inject(TranslateService);
   viewportScroller = inject(ViewportScroller);
+  messageService = inject(MessageService);
+
+  async ngOnInit() {
+    for (const subject of this.subjects) {
+      this.subjectsTranslated.push({
+        value: subject,
+        label: this.translateService.instant('createExam.' + subject)
+      });
+    }
+  }
 
   subjects = ['languageAndCommunication', 'mathematics', 'physics', 'chemistry', 'biology', 'naturalSciences', 'geographyAndSocialSciences', 'physicalEducation', 'visualArts', 'music', 'technology'];
+  subjectsTranslated = [] as { label: string; value: string }[];
 
   examDataForm = new FormGroup({
     exercises: new FormGroup({
@@ -135,7 +148,11 @@ export class CreateExamComponent {
   async createTest(event: Event) {
     event.preventDefault();
 
-    this.matSnackBar.open(await firstValueFrom(this.translateService.get('createExam.initExamCreation')), '', { horizontalPosition: 'right', duration: 60 * 1000 });
+    this.messageService.add({
+      severity: 'info',
+      summary: this.translateService.instant('createExam.initExamCreation'),
+      sticky: true
+    });
 
     this.isCreatingPdf = true;
     try {
@@ -144,18 +161,23 @@ export class CreateExamComponent {
           responseType: 'text'
         })
       );
-      this.matSnackBar.open(await firstValueFrom(this.translateService.get('createExam.examCreationSucceded')), await firstValueFrom(this.translateService.get('createExam.close')), {
-        horizontalPosition: 'right'
+      this.messageService.clear();
+      this.messageService.add({
+        severity: 'success',
+        summary: this.translateService.instant('createExam.examCreationSucceded')
       });
 
       this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`/api/pdf/${pdfName}`);
       setTimeout(() => this.viewportScroller.scrollToAnchor('exam-pdf'), 100);
     } catch (error) {
+      this.messageService.clear();
+      this.messageService.add({
+        severity: 'error',
+        summary: this.translateService.instant('createExam.examCreationFailed'),
+        sticky: true
+      });
       console.error(error);
       this.pdfUrl = undefined;
-      this.matSnackBar.open(await firstValueFrom(this.translateService.get('createExam.examCreationFailed')), await firstValueFrom(this.translateService.get('createExam.close')), {
-        horizontalPosition: 'right'
-      });
     }
     this.isCreatingPdf = false;
   }

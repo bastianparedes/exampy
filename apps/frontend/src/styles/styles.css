@@ -1,4 +1,7 @@
 @import "normalize.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
 
 @tailwind base;
 @tailwind components;
@@ -6,8 +9,4 @@
 
 a {
   text-decoration: none;
-}
-
-.mat-mdc-form-field-subscript-wrapper.mat-mdc-form-field-bottom-align {
-  display: none;
 }

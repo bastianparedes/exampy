@@ -1,57 +1,85 @@
 <form
-  class="tw-bg-white tw-flex tw-flex-col tw-p-5 tw-gap-4 tw-mx-auto tw-my-5 tw-min-w-64 tw-w-9/12 tw-max-w-2xl tw-rounded-lg"
+  class="tw-bg-white tw-flex tw-flex-col tw-px-5 tw-py-7 tw-gap-8 tw-mx-auto tw-my-5 tw-min-w-64 tw-w-11/12 tw-max-w-2xl tw-rounded-lg tw-shadow-gray-500 tw-shadow-md sm:tw-w-9/12 sm:tw-px-7"
   [formGroup]="this.userData"
   (submit)="onSubmit($event)">
   <div class="relative tw-flex tw-flex-col tw-gap-[inherit] md:tw-flex-row">
-    <mat-form-field class="tw-bg-white tw-rounded-md tw-flex-1">
-      <mat-label>{{ 'signUp.firstName' | translate }}</mat-label>
-      <input matInput maxlength="255" formControlName="firstName" />
-    </mat-form-field>
+    <p-floatLabel class="tw-flex-1">
+      <input
+        pInputText
+        [class]="{
+          'tw-w-full': true,
+          'ng-invalid ng-dirty': this.userData.get('firstName')?.invalid
+        }"
+        id="firstName"
+        formControlName="firstName"
+        maxlength="255" />
+      <label for="firstName">{{ 'signUp.firstName' | translate }}</label>
+    </p-floatLabel>
 
-    <mat-form-field class="tw-bg-white tw-rounded-md tw-flex-1">
-      <mat-label>{{ 'signUp.lastName' | translate }}</mat-label>
-      <input matInput maxlength="255" formControlName="lastName" />
-    </mat-form-field>
+    <p-floatLabel class="tw-flex-1">
+      <input
+        pInputText
+        [class]="{
+          'tw-w-full': true,
+          'ng-invalid ng-dirty': this.userData.get('lastName')?.invalid
+        }"
+        id="lastName"
+        formControlName="lastName"
+        maxlength="255" />
+      <label for="lastName">{{ 'signUp.lastName' | translate }}</label>
+    </p-floatLabel>
   </div>
 
-  <mat-form-field class="tw-bg-white tw-rounded-md">
-    <mat-label>{{ 'signUp.email' | translate }}</mat-label>
-    <input type="email" matInput formControlName="email" />
-  </mat-form-field>
-
-  <mat-form-field class="tw-bg-white tw-rounded-md">
-    <mat-label>{{ 'signUp.password' | translate }}</mat-label>
+  <p-floatLabel class="tw-flex-1">
     <input
-      matInput
-      [type]="this.hidePassword ? 'password' : 'text'"
-      maxlength="255"
-      formControlName="password" />
-    <button mat-icon-button matSuffix (click)="this.toggleHidePassword()">
-      <mat-icon>{{
-        this.hidePassword ? 'visibility_off' : 'visibility'
-      }}</mat-icon>
-    </button>
-  </mat-form-field>
+      pInputText
+      [class]="{
+        'tw-w-full': true,
+        'ng-invalid ng-dirty': this.userData.get('email')?.invalid
+      }"
+      id="email"
+      formControlName="email"
+      maxlength="255" />
+    <label for="email">{{ 'signUp.email' | translate }}</label>
+  </p-floatLabel>
 
-  <mat-form-field class="tw-bg-white tw-rounded-md">
-    <mat-label>{{ 'signUp.confirmPassword' | translate }}</mat-label>
-    <input
-      matInput
-      [type]="this.hidePassword ? 'password' : 'text'"
+  <p-floatLabel class="tw-w-full">
+    <p-password
+      [class]="{
+        'ng-invalid ng-dirty': this.userData.get('password')?.invalid
+      }"
+      inputStyleClass="tw-w-full"
+      styleClass="tw-w-full"
+      formControlName="password"
       maxlength="255"
-      formControlName="confirmPassword" />
-    <button mat-icon-button matSuffix (click)="this.toggleHidePassword()">
-      <mat-icon>{{
-        this.hidePassword ? 'visibility_off' : 'visibility'
-      }}</mat-icon>
-    </button>
-  </mat-form-field>
-  <button
-    mat-flat-button
-    class="tw-w-fit tw-mx-auto"
-    [disabled]="this.userData.invalid">
-    {{ 'signUp.signUp' | translate }}
-  </button>
+      [toggleMask]="true" />
+    <label for="password">{{ 'signUp.password' | translate }}</label>
+  </p-floatLabel>
+
+  <p-floatLabel class="tw-w-full">
+    <p-password
+      [class]="!this.passwordsAreEqual() ? 'ng-invalid ng-dirty' : ''"
+      inputStyleClass="tw-w-full"
+      styleClass="tw-w-full"
+      formControlName="confirmPassword"
+      maxlength="255"
+      [toggleMask]="true" />
+    @if (!this.passwordsAreEqual()) {
+      <div class="relative tw-mt-1">
+        <small class="tw-text-red-500 tw-absolute">{{
+          'signUp.passwordsMustBeEqual' | translate
+        }}</small>
+      </div>
+    }
+    <label for="confirmPassword">{{
+      'signUp.confirmPassword' | translate
+    }}</label>
+  </p-floatLabel>
+
+  <p-button class="tw-mx-auto" [disabled]="this.userData.invalid">{{
+    'logIn.signUp' | translate
+  }}</p-button>
+
   <p class="tw-text-center tw-my-0">
     {{ 'signUp.haveAccount' | translate }}
     <a class="tw-text-blue-500" href="/log_in">{{

@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TranslateModule } from '@ngx-translate/core';
-import { MatIconModule } from '@angular/material/icon';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [MatProgressSpinnerModule, TranslateModule, MatIconModule],
+  imports: [TranslateModule, ButtonModule],
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.scss'
 })
