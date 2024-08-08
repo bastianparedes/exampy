@@ -10,6 +10,7 @@ interface UserData {
   firstName: string;
   lastName: string;
   createdAt: string;
+  passwordHash: string;
 }
 
 @Injectable({
@@ -29,7 +30,7 @@ export class AuthService {
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
-      this.fetchUserData(['firstName']).then((response) => {
+      this.getUserData(['firstName']).then((response) => {
         if (response === null) {
           this.isAuthenticated = false;
           this.userData = null;
@@ -80,11 +81,11 @@ export class AuthService {
     }
   }
 
-  async fetchUserData<T extends (keyof UserData)[]>(columns: T): Promise<FilteredColumnsByArray<UserData, T> | null> {
+  async getUserData<T extends (keyof UserData)[]>(columns: T): Promise<FilteredColumnsByArray<UserData, T> | null> {
     const queryParams = new URLSearchParams();
     for (const column of new Set(columns)) queryParams.append('columns', column);
 
-    const url = `/api/auth/get_user_data?${queryParams.toString()}`;
+    const url = `/api/auth/user_data?${queryParams.toString()}`;
     try {
       const json = await firstValueFrom(this.httpClient.get<FilteredColumnsByArray<UserData, T>>(url, { responseType: 'json' }));
       return json;
