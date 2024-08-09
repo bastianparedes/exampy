@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS "users" (
   "password_hash" VARCHAR(255) NOT NULL,
   "first_name" VARCHAR(255) NOT NULL,
   "last_name" VARCHAR(255) NOT NULL,
+  "verified" BOOLEAN NOT NULL DEFAULT FALSE,
   "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
