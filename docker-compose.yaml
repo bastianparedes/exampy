@@ -40,6 +40,10 @@ services:
       DATABASE_PORT: ${DATABASE_PORT:-5432}
       DATABASE_NAME: ${DATABASE_NAME:-postgres}
       DATABASE_SSL_MODE: ${DATABASE_SSL_MODE:-disable}
+      EMAIL_ID: ${EMAIL_ID:?error}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD:?error}
+      EMAIL_SERVICE: ${EMAIL_SERVICE:?error}
+      EMAIL_HOST: ${EMAIL_HOST:?error}
     ports:
       - "3000:3000"
     depends_on:

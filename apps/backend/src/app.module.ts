@@ -7,6 +7,7 @@ import { DbService } from './services/db';
 import { AuthController } from './controllers/auth.controller';
 import { AuthService } from './services/auth.service';
 import { JwtModule } from '@nestjs/jwt';
+import { MailService } from './services/mail.service';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { JwtModule } from '@nestjs/jwt';
     })
   ],
   controllers: [HealthController, ExamController, AuthController],
-  providers: [AiService, LatexService, DbService, AuthService]
+  providers: [AiService, LatexService, DbService, AuthService, MailService]
 })
 export class AppModule {}

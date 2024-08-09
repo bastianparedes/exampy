@@ -3,6 +3,7 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../services/auth.service';
 import { DbService } from '../services/db';
+import { MailService } from '../services/mail.service';
 import { IsString, IsEmail, MaxLength, MinLength, IsBoolean, IsArray, ArrayNotEmpty, IsIn, IsNotIn } from 'class-validator';
 import * as bcrypt from 'bcrypt';
 import { Transform } from 'class-transformer';
@@ -59,10 +60,15 @@ export class AuthController {
   @Inject(DbService)
   dbService = new DbService();
 
+  @Inject(MailService)
+  mailService = new MailService();
+
   private readonly cookieTokenName = 'access_token';
 
   @Post('sign_up')
   async postSignup(@Body() body: BodyValidatorSignup, @Res() res: FastifyReply) {
+    const userExists = (await this.dbService.db.select({ email: this.dbService.schema.Users.email }).from(this.dbService.schema.Users).limit(1)).length > 0;
+    if (userExists) return res.status(409).send({ success: false });
     try {
       await this.dbService.db.insert(this.dbService.schema.Users).values({
         email: body.email,
