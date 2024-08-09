@@ -23,6 +23,6 @@ export class NavComponent {
 
   async logOut() {
     await this.authService.logOut();
-    this.router.navigate(['/']);
+    await this.router.navigate(['/']).then(() => window.location.reload());
   }
 }

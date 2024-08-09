@@ -17,6 +17,7 @@
 
   <p-floatLabel class="tw-w-full">
     <p-password
+      [feedback]="false"
       [class]="{
         'ng-invalid ng-dirty': this.userData.get('password')?.invalid
       }"

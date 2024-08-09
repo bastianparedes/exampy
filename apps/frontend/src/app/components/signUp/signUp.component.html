@@ -52,12 +52,24 @@
       styleClass="tw-w-full"
       formControlName="password"
       maxlength="255"
-      [toggleMask]="true" />
+      [toggleMask]="true">
+      <ng-template pTemplate="footer">
+        <p-divider />
+        <p>Suggestions</p>
+        <ul class="tw-pl-2 tw-ml-2 tw-mt-0 tw-leading-5">
+          <li>At least one lowercase</li>
+          <li>At least one uppercase</li>
+          <li>At least one numeric</li>
+          <li>Minimum 8 characters</li>
+        </ul>
+      </ng-template>
+    </p-password>
     <label for="password">{{ 'signUp.password' | translate }}</label>
   </p-floatLabel>
 
   <p-floatLabel class="tw-w-full">
     <p-password
+      [feedback]="false"
       [class]="!this.passwordsAreEqual() ? 'ng-invalid ng-dirty' : ''"
       inputStyleClass="tw-w-full"
       styleClass="tw-w-full"

@@ -4,7 +4,6 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../services/auth.service';
 import { DbService } from '../services/db';
 import { IsString, IsEmail, MaxLength, MinLength, IsBoolean, IsArray, ArrayNotEmpty, IsIn, IsNotIn } from 'class-validator';
-import { UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { Transform } from 'class-transformer';
 
@@ -64,24 +63,32 @@ export class AuthController {
 
   @Post('sign_up')
   async postSignup(@Body() body: BodyValidatorSignup, @Res() res: FastifyReply) {
-    await this.dbService.db.insert(this.dbService.schema.Users).values({
-      email: body.email,
-      passwordHash: await bcrypt.hash(body.password, await bcrypt.genSalt(10)),
-      firstName: body.firstName,
-      lastName: body.lastName
-    });
-    res.status(201).send();
+    try {
+      await this.dbService.db.insert(this.dbService.schema.Users).values({
+        email: body.email,
+        passwordHash: await bcrypt.hash(body.password, await bcrypt.genSalt(10)),
+        firstName: body.firstName,
+        lastName: body.lastName
+      });
+      return res.status(201).send({ success: true });
+    } catch {
+      return res.status(409).send({ success: false });
+    }
   }
 
   @Post('log_in')
   async postLogin(@Body() body: BodyValidatorLogin, @Res() res: FastifyReply) {
-    const [userData] = await this.dbService.db.select().from(this.dbService.schema.Users).where(this.dbService.operators.eq(this.dbService.schema.Users.email, body.email)).limit(1);
+    const [userData] = await this.dbService.db
+      .select({ id: this.dbService.schema.Users.id, passwordHash: this.dbService.schema.Users.passwordHash })
+      .from(this.dbService.schema.Users)
+      .where(this.dbService.operators.eq(this.dbService.schema.Users.email, body.email))
+      .limit(1);
 
     const userExists = userData !== undefined;
-    if (!userExists) throw new UnauthorizedException('Invalid email or password');
+    if (!userExists) return res.status(404).send({ success: false });
 
     const passwordIsCorrect = await bcrypt.compare(body.password, userData.passwordHash);
-    if (!passwordIsCorrect) throw new UnauthorizedException('Invalid email or password');
+    if (!passwordIsCorrect) return res.status(404).send({ success: false });
 
     res
       .setCookie(this.cookieTokenName, await this.jwtService.signAsync({ id: userData.id }), {
@@ -91,14 +98,14 @@ export class AuthController {
         maxAge: body.keepSesion ? 60 * 60 * 24 : undefined, // 1h
         path: '/'
       })
-      .status(204)
-      .send();
+      .status(200)
+      .send({ success: true });
   }
 
   @Get('log_out')
   async getLogout(@Res() res: FastifyReply) {
     res.clearCookie(this.cookieTokenName);
-    res.status(204).send();
+    res.status(200).send({ success: true });
   }
 
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -108,7 +115,10 @@ export class AuthController {
 
     const token = req.cookies[this.cookieTokenName];
     const dataFromToken = this.jwtService.decode(token) as { id: number; iat: number; exp: number } | null;
-    if (dataFromToken === null) return res.send({ authorized: false });
+    if (dataFromToken === null) {
+      res.clearCookie(this.cookieTokenName);
+      return res.status(404).send({});
+    }
 
     const columnobject = columnNames.reduce(
       (object, columnName) => {

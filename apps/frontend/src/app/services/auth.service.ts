@@ -3,14 +3,15 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import type { FilteredColumnsByArray } from '../../types/dictionary';
+import { Router } from '@angular/router';
 
 interface UserData {
   id: number;
   email: string;
+  passwordHash: string;
   firstName: string;
   lastName: string;
   createdAt: string;
-  passwordHash: string;
 }
 
 @Injectable({
@@ -19,6 +20,7 @@ interface UserData {
 export class AuthService {
   private platformId = inject(PLATFORM_ID);
   private httpClient = inject(HttpClient);
+  router = inject(Router);
 
   isAuthenticated: undefined | null | boolean = undefined;
   userData:
@@ -43,45 +45,21 @@ export class AuthService {
   }
 
   async signUp(userData: Omit<UserData, 'id'> & { password: string } & Record<string, unknown>) {
-    try {
-      await firstValueFrom(this.httpClient.post('/api/auth/sign_up', userData));
-      return {
-        success: true
-      };
-    } catch {
-      return {
-        success: false
-      };
-    }
+    const { success } = await firstValueFrom(this.httpClient.post<{ success: boolean }>('/api/auth/sign_up', userData));
+    return { success };
   }
 
-  async logIn(email: string, password: string) {
-    try {
-      await firstValueFrom(this.httpClient.post('/api/auth/log_in', { email, password }));
-      return {
-        success: true
-      };
-    } catch {
-      return {
-        success: false
-      };
-    }
+  async logIn(email: string, password: string, keepSesion: boolean) {
+    const { success } = await firstValueFrom(this.httpClient.post<{ success: boolean }>('/api/auth/log_in', { email, password, keepSesion }));
+    return { success };
   }
 
   async logOut() {
-    try {
-      await firstValueFrom(this.httpClient.get('/api/auth/log_out'));
-      return {
-        success: true
-      };
-    } catch {
-      return {
-        success: false
-      };
-    }
+    const { success } = await firstValueFrom(this.httpClient.get<{ success: boolean }>('/api/auth/log_out'));
+    return { success };
   }
 
-  async getUserData<T extends (keyof UserData)[]>(columns: T): Promise<FilteredColumnsByArray<UserData, T> | null> {
+  async getUserData<T extends (keyof Omit<UserData, 'passwordHash'>)[]>(columns: T): Promise<FilteredColumnsByArray<UserData, T> | null> {
     const queryParams = new URLSearchParams();
     for (const column of new Set(columns)) queryParams.append('columns', column);
 

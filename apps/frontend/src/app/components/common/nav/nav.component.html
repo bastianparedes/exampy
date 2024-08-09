@@ -22,11 +22,10 @@
       @if (this.authService.isAuthenticated) {
         <p-button
           [label]="'nav.logOut' | translate"
-          class="tw-border-2 tw-border-solid tw-border-white tw-rounded-md" />
-        <a
-          class="tw-text-white tw-bg-black tw-border-solid tw-border-2 tw-border-white tw-rounded-md tw-py-2 tw-px-3 tw-justify-center tw-items-center tw-text-nowrap tw-hidden md:tw-flex"
-          href="/log_out"
-          >{{ 'nav.logOut' | translate }}</a
+          (onClick)="this.logOut()"
+          [link]="true"
+          styleClass="tw-text-white tw-no-underline hover:tw-no-underline"
+          class="tw-border-2 tw-border-solid tw-border-white tw-text-white tw-rounded-md hover:tw-no-underline" />
         >
       } @else if (this.authService.isAuthenticated === false) {
         <a

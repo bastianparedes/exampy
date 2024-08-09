@@ -2,22 +2,24 @@ import { Component, inject } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
 import { Router } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { PasswordModule } from 'primeng/password';
 import { ButtonModule } from 'primeng/button';
+import { DividerModule } from 'primeng/divider';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [TranslateModule, FormsModule, ReactiveFormsModule, InputTextModule, FloatLabelModule, PasswordModule, ButtonModule],
+  imports: [TranslateModule, FormsModule, ReactiveFormsModule, InputTextModule, FloatLabelModule, PasswordModule, ButtonModule, DividerModule],
   templateUrl: './signUp.component.html'
 })
 export class SignUpComponent {
   httpClient = inject(HttpClient);
   router = inject(Router);
+  authService = inject(AuthService);
 
   constructor() {
     this.userData.addValidators(() => {
@@ -42,12 +44,9 @@ export class SignUpComponent {
     event.preventDefault();
     if (this.userData.invalid) return;
 
-    firstValueFrom(this.httpClient.post('/api/auth/sign_up', this.userData.value))
-      .then(() => {
-        this.router.navigate(['/log_in']);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    const { success } = await this.authService.signUp(this.userData.value as any);
+    if (success) {
+      return await this.router.navigate(['/log_in']).then(() => window.location.reload());
+    }
   }
 }
