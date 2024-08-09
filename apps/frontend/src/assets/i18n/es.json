@@ -56,7 +56,16 @@
     "signUp": "Crear cuenta",
     "haveAccount": "¿Ya tienes una cuenta?",
     "logIn": "Inicia sesión",
-    "passwordsMustBeEqual": "* Las contraseñas deben ser iguales"
+    "passwordsMustBeEqual": "* Las contraseñas deben ser iguales",
+    "suggestions": "Sugerencias",
+    "atLeastOneLowercase": "Al menos una minúscula",
+    "atLeastOneUppercase": "Al menos una mayúscula",
+    "atLeastOneNumeric": "Al menos un número",
+    "minimumEightCharacters": "Al menos 6 caracteres",
+    "promptLabel": "Ingresa una contraseña",
+    "weakLabel": "Muy simple",
+    "mediumLabel": "Seguridad media",
+    "strongLabel": "Muy segura"
   },
   "logIn": {
     "email": "E-mail",
